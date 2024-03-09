@@ -1,0 +1,11 @@
+D:\Project\BookRenterNatwest\BookRenterRepository\bin\Debug\net8.0\BookRenterRepository.deps.json
+D:\Project\BookRenterNatwest\BookRenterRepository\bin\Debug\net8.0\BookRenterRepository.dll
+D:\Project\BookRenterNatwest\BookRenterRepository\bin\Debug\net8.0\BookRenterRepository.pdb
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.AssemblyInfoInputs.cache
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.AssemblyInfo.cs
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.csproj.CoreCompileInputs.cache
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.dll
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\refint\BookRenterRepository.dll
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\BookRenterRepository.pdb
+D:\Project\BookRenterNatwest\BookRenterRepository\obj\Debug\net8.0\ref\BookRenterRepository.dll

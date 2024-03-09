@@ -1,0 +1,15 @@
+D:\Project\BookRenterNatwest\BookRenterService\bin\Debug\net8.0\BookRenterService.deps.json
+D:\Project\BookRenterNatwest\BookRenterService\bin\Debug\net8.0\BookRenterService.dll
+D:\Project\BookRenterNatwest\BookRenterService\bin\Debug\net8.0\BookRenterService.pdb
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.GeneratedMSBuildEditorConfig.editorconfig
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.AssemblyInfoInputs.cache
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.AssemblyInfo.cs
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.csproj.CoreCompileInputs.cache
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.dll
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\refint\BookRenterService.dll
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.pdb
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\ref\BookRenterService.dll
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRenterService.csproj.AssemblyReference.cache
+D:\Project\BookRenterNatwest\BookRenterService\bin\Debug\net8.0\BookRenterData.dll
+D:\Project\BookRenterNatwest\BookRenterService\bin\Debug\net8.0\BookRenterData.pdb
+D:\Project\BookRenterNatwest\BookRenterService\obj\Debug\net8.0\BookRent.9EF6F2A8.Up2Date
