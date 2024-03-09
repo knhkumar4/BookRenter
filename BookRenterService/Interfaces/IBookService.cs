@@ -1,7 +1,6 @@
 ﻿
 using System.Linq.Expressions;
-
-using BookRenterData.Entity;
+using BookRenterData.Entities;
 
 namespace BookRenter.Services.Interfaces
 {

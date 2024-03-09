@@ -1,5 +1,5 @@
-﻿using BookRenterData.Contexts;
-using BookRenterData.Entity;
+﻿using BookRenterData.Context;
+using BookRenterData.Entities;
 using BookRenterData.Repositories.Base;
 using BookRenterData.Repositories.Interfaces;
 

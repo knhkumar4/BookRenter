@@ -1,39 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BookRenterData.Entity
+namespace BookRenterData.Entities
 {
-    public class Author
-    {
-        [Key]
-        public int AuthorId { get; set; }
 
-        [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-
-        public ICollection<Book>? Books { get; set; }
-    }
     public class Book
     {
         [Key]
         public int BookId { get; set; }
-
         [Required]
         public required string Title { get; set; }
-
+        public string Description { get; set; }
         [Required]
-        public int AuthorId { get; set; }
+        public required string Author { get; set; }
+        public string Genre { get; set; }
+        public double Price { get; set; }
+        [Required]
+        public DateTime CreatedDate { get; set; }
 
-        [ForeignKey("AuthorId")]
-        public required Author Author { get; set; }
 
         public ICollection<CartBook>? CartBooks { get; set; }
 
-        [Required]
-        public DateTime CreatedDate { get; set; }
     }
 
     public class Cart

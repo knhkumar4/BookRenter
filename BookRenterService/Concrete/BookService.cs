@@ -1,68 +1,56 @@
-﻿using BookRenterData.Entity;
-using BookRenterData.Repositories.Base.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BookRenterService.Concrete
+using BookRenterData.UnitOfWork.Interfaces;
+using BookRenterService.Folder.BookRenter.Models.Responses;
+
+namespace BookRenter.Services
 {
-    public class BookService
+    public class BookResponseService
     {
-        private readonly IBaseRepository<Book> _bookRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public BookService(IBaseRepository<Book> bookRepository)
+        public BookResponseService(IUnitOfWork unitOfWork)
         {
-            _bookRepository = bookRepository ?? throw new ArgumentNullException(nameof(bookRepository));
+            _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
 
-        public async Task<Book> GetBookByIdAsync(int id)
+        public async Task<BookResponse> GetBookResponseByIdAsync(int id)
         {
-            return await _bookRepository.GetByIdAsync(id);
+            var book = await _unitOfWork.BookRepository.GetByIdAsync(id);
+            return book; // Implicit conversion from Book to BookResponse
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        public async Task<IEnumerable<BookResponse>> GetAllBookResponsesAsync()
         {
-            return await _bookRepository.GetAllAsync();
+            var books = await _unitOfWork.BookRepository.GetAllAsync();
+            return books.Select(book => (BookResponse)book); // Explicit conversion of each Book to BookResponse
         }
 
-        public async Task<Book> AddBookAsync(Book book)
+        public async Task<BookResponse> AddBookResponseAsync(BookResponse bookResponse)
         {
+            if (bookResponse == null)
+            {
+                throw new ArgumentNullException(nameof(bookResponse));
+            }
+
+            var book = bookResponse; // Implicit conversion from BookResponse to Book
+            var addedBook = await _unitOfWork.BookRepository.AddAsync(book);
+            return addedBook; // Implicit conversion from Book to BookResponse
+        }
+
+        public async Task DeleteBookResponseAsync(int id)
+        {
+            var book = await _unitOfWork.BookRepository.GetByIdAsync(id);
             if (book == null)
             {
-                throw new ArgumentNullException(nameof(book));
+                throw new ArgumentException($"Book with ID {id} not found.", nameof(id));
             }
 
-            return await _bookRepository.AddAsync(book);
+            await _unitOfWork.BookRepository.DeleteAsync(book);
         }
 
-        public async Task DeleteBookAsync(Book book)
-        {
-            if (book == null)
-            {
-                throw new ArgumentNullException(nameof(book));
-            }
-
-            await _bookRepository.DeleteAsync(book);
-        }
-
-        public async Task DeleteBooksAsync(Expression<Func<Book, bool>> filter)
-        {
-            if (filter == null)
-            {
-                throw new ArgumentNullException(nameof(filter));
-            }
-
-            await _bookRepository.DeleteManyAsync(filter);
-        }
-
-        public async Task<IEnumerable<Book>> GetBooksAsync(Expression<Func<Book, bool>> filter = null,
-                                                            Func<IQueryable<Book>, IOrderedQueryable<Book>> orderBy = null,
-                                                            int? top = null,
-                                                            int? skip = null,
-                                                            params string[] includeProperties)
-        {
-            return await _bookRepository.GetManyAsync(filter, orderBy, top, skip, includeProperties);
-        }
+        // Add other methods as needed
     }
 }

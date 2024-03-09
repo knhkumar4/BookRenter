@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using BookRenter.Services.Interfaces;
+﻿
+using BookRenter.Services;
+using BookRenterService.Folder.BookRenter.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookRenter.Controllers
@@ -11,74 +9,43 @@ namespace BookRenter.Controllers
     [Route("api/books")]
     public class BookController : ControllerBase
     {
-        private readonly IBookService _bookService;
+        private readonly BookResponseService _bookResponseService;
 
-        public BookController(IBookService bookService)
+        public BookController(BookResponseService bookResponseService)
         {
-            _bookService = bookService ?? throw new ArgumentNullException(nameof(bookService));
+            _bookResponseService = bookResponseService ?? throw new ArgumentNullException(nameof(bookResponseService));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBookById(int id)
+        public async Task<ActionResult<BookResponse>> GetBookById(int id)
         {
-            var book = await _bookService.GetBookByIdAsync(id);
-            if (book == null)
+            var bookResponse = await _bookResponseService.GetBookResponseByIdAsync(id);
+            if (bookResponse == null)
             {
                 return NotFound();
             }
-            return Ok(book);
+            return Ok(bookResponse);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetAllBooks()
+        public async Task<ActionResult<IEnumerable<BookResponse>>> GetAllBookResponses()
         {
-            var books = await _bookService.GetAllBooksAsync();
-            return Ok(books);
+            var bookResponses = await _bookResponseService.GetAllBookResponsesAsync();
+            return Ok(bookResponses);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Book>> AddBook(Book book)
+        public async Task<ActionResult<BookResponse>> AddBook(BookResponse bookResponse)
         {
-            var addedBook = await _bookService.AddBookAsync(book);
-            return CreatedAtAction(nameof(GetBookById), new { id = addedBook.BookId }, addedBook);
+            var addedBookResponse = await _bookResponseService.AddBookResponseAsync(bookResponse);
+            return CreatedAtAction(nameof(GetBookById), new { id = addedBookResponse.BookId }, addedBookResponse);
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteBook(int id)
+        public async Task<ActionResult> DeleteBookResponse(int id)
         {
-            var book = await _bookService.GetBookByIdAsync(id);
-            if (book == null)
-            {
-                return NotFound();
-            }
-
-            await _bookService.DeleteBookAsync(book);
+            await _bookResponseService.DeleteBookResponseAsync(id);
             return NoContent();
-        }
-
-        [HttpDelete]
-        public async Task<ActionResult> DeleteBooks(Expression<Func<Book, bool>> filter)
-        {
-            await _bookService.DeleteBooksAsync(filter);
-            return NoContent();
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<Book>>> SearchBooks([FromQuery] string title, [FromQuery] string author)
-        {
-            // You can implement search functionality based on title and author here
-            // For simplicity, let's assume it returns all books if no search parameters are provided
-            if (string.IsNullOrEmpty(title) && string.IsNullOrEmpty(author))
-            {
-                return await GetAllBooks();
-            }
-
-            // Implement your search logic here
-            // For example:
-            // var books = await _bookService.SearchBooksAsync(title, author);
-            // return Ok(books);
-
-            return NotFound();
         }
     }
 }

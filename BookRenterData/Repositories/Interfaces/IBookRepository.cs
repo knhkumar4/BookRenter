@@ -1,6 +1,6 @@
 ﻿
 
-using BookRenterData.Entity;
+using BookRenterData.Entities;
 using BookRenterData.Repositories.Base.Interfaces;
 
 namespace BookRenterData.Repositories.Interfaces
