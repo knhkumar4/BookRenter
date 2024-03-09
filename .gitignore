@@ -1,4 +1,6 @@
-﻿################################################################################
-# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
-################################################################################
+﻿# Ignore Visual Studio files
 .vs/
+
+# Ignore build output directories in all subfolders
+**/obj/
+**/bin/
