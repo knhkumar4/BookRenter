@@ -2,6 +2,7 @@
 using BookRenterData.Repositories;
 using BookRenterData.Repositories.Interfaces;
 using BookRenterData.UnitOfWork.Interfaces;
+using BookRenterRepository.Repositories.Interfaces;
 using JC.Samples.AsyncRepository.Repository;
 using System;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace BookRenterData.UnitOfWork
     {
         private readonly BookRenterContext _dbContext;
         private IBookRepository _bookRepository;
-
+        private ICartBookRepository _cartBookRepository;
         public UnitOfWork(BookRenterContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -30,6 +31,18 @@ namespace BookRenterData.UnitOfWork
             }
         }
 
+        public ICartBookRepository CartBookRepository
+        {
+            get
+            {
+                if (_cartBookRepository == null)
+                {
+                    _cartBookRepository = new CartBookRepository(_dbContext);
+                }
+                return _cartBookRepository;
+            }
+        }
+        
         public async Task CompleteAsync() => await _dbContext.SaveChangesAsync();
 
         public async ValueTask DisposeAsync()

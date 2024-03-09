@@ -61,6 +61,18 @@ namespace BookRenter.Services
             await _unitOfWork.BookRepository.DeleteAsync(book);
         }
 
+        public async Task<IEnumerable<BookResponse>> SearchBooksAsync(string searchTerm)
+        {
+            // Search by book title or author
+            var books = await _unitOfWork.BookRepository.GetManyAsync(
+                b => b.Title.Contains(searchTerm) || b.Author.Contains(searchTerm)
+            );
+
+            // Convert domain model to DTO
+            var bookResponses = books.Select(book => (BookResponse)book);
+
+            return bookResponses;
+        }
         // Add other methods as needed
     }
 }

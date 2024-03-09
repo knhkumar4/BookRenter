@@ -52,7 +52,9 @@ namespace BookRenterService.Folder
                     Author = bookResponse.Author,
                     Description = bookResponse.Description,
                     Genre = bookResponse.Genre,
-                    Price = bookResponse.Price
+                    Price = bookResponse.Price,
+                    CreatedDate = DateTime.UtcNow
+                    
                 };
             }
         }

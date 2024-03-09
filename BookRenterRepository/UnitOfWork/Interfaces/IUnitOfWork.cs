@@ -1,4 +1,6 @@
-﻿using BookRenterData.Repositories.Interfaces;
+﻿
+using BookRenterData.Repositories.Interfaces;
+using BookRenterRepository.Repositories.Interfaces;
 using System;
 using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@ namespace BookRenterData.UnitOfWork.Interfaces
     public interface IUnitOfWork : IAsyncDisposable
     {
         IBookRepository BookRepository { get; }
+        ICartBookRepository CartBookRepository { get; }
         #region Properties
 
         Task CompleteAsync();

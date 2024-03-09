@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BookRenterData\BookRenterData.csproj" />
+    <ProjectReference Include="..\BookRenterRepository\BookRenterRepository.csproj" />
   </ItemGroup>
 
 </Project>

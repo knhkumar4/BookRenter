@@ -11,5 +11,6 @@ namespace BookRenter.Services.Interfaces
         Task DeleteBookResponseAsync(int id);
         Task<IEnumerable<BookResponse>> GetAllBookResponsesAsync();
         Task<BookResponse> GetBookResponseByIdAsync(int id);
+        Task<IEnumerable<BookResponse>> SearchBooksAsync(string searchTerm);
     }
 }
