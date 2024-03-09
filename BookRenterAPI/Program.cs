@@ -1,11 +1,24 @@
+using BookRenterData.Context;
+using BookRenterData.UnitOfWork.Interfaces;
+using BookRenterData.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+using BookRenter.Services.Interfaces;
+using BookRenter.Services;
+
 var builder = WebApplication.CreateBuilder(args);
-
+// Add your services
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork implements IUnitOfWork
+builder.Services.AddTransient<IBookService, BookService>();
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add DbContext and specify connection string
+builder.Services.AddDbContext<BookRenterContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("BookRenterDatabase")));
+
+
 
 var app = builder.Build();
 
@@ -17,9 +30,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using BookRenter.Services.Interfaces;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterService.Folder.BookRenter.Models.Responses;
 
 namespace BookRenter.Services
 {
-    public class BookResponseService
+    public class BookService:IBookService
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public BookResponseService(IUnitOfWork unitOfWork)
+        public BookService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         }
@@ -37,6 +37,16 @@ namespace BookRenter.Services
 
             var book = bookResponse; // Implicit conversion from BookResponse to Book
             var addedBook = await _unitOfWork.BookRepository.AddAsync(book);
+            try
+            {
+                await _unitOfWork.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
             return addedBook; // Implicit conversion from Book to BookResponse
         }
 

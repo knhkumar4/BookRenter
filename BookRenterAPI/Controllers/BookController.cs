@@ -1,5 +1,6 @@
 ﻿
 using BookRenter.Services;
+using BookRenter.Services.Interfaces;
 using BookRenterService.Folder.BookRenter.Models.Responses;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,9 +10,9 @@ namespace BookRenter.Controllers
     [Route("api/books")]
     public class BookController : ControllerBase
     {
-        private readonly BookResponseService _bookResponseService;
+        private readonly IBookService _bookResponseService;
 
-        public BookController(BookResponseService bookResponseService)
+        public BookController(IBookService bookResponseService)
         {
             _bookResponseService = bookResponseService ?? throw new ArgumentNullException(nameof(bookResponseService));
         }
