@@ -13,6 +13,7 @@ namespace BookRenterData.UnitOfWork.Interfaces
     {
         IBookRepository BookRepository { get; }
         ICartBookRepository CartBookRepository { get; }
+        IUserRepository UserRepository { get; }
         #region Properties
 
         Task CompleteAsync();

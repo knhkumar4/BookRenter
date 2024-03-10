@@ -14,6 +14,8 @@ namespace BookRenterData.UnitOfWork
         private readonly BookRenterContext _dbContext;
         private IBookRepository _bookRepository;
         private ICartBookRepository _cartBookRepository;
+        private IUserRepository _userRepository;
+
         public UnitOfWork(BookRenterContext dbContext)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
@@ -42,7 +44,20 @@ namespace BookRenterData.UnitOfWork
                 return _cartBookRepository;
             }
         }
+
+        public IUserRepository UserRepository
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    _userRepository = new UserRepository(_dbContext);
+                }
+                return _userRepository;
+            }
+        }
         
+
         public async Task CompleteAsync() => await _dbContext.SaveChangesAsync();
 
         public async ValueTask DisposeAsync()

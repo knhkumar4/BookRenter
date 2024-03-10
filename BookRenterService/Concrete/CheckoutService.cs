@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using BookRenter.Services.Interfaces;
 using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
+using BookRenterService.Interfaces;
 
 namespace BookRenter.Services
 {
@@ -32,15 +33,12 @@ namespace BookRenter.Services
                 // Cart has reached the maximum limit
                 throw new InvalidOperationException("A maximum of 5 books can be added to the cart.");
             }
-
             // Add the book to the cart
             var newCartItem = new CartBook
             {
-                BookId = bookId,
-                CartId = cartId,
+                BookId = bookId,                
                 CreatedDate = DateTime.Now
             };
-
             await _unitOfWork.CartBookRepository.AddAsync(newCartItem);
             await _unitOfWork.CompleteAsync();
 

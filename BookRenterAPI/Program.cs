@@ -4,11 +4,16 @@ using BookRenterData.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 using BookRenter.Services.Interfaces;
 using BookRenter.Services;
+using BookRenterService.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add your services
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork implements IUnitOfWork
 builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<ICheckoutService, CheckoutService>();
+builder.Services.AddTransient<IUserService, UserService>();
+
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

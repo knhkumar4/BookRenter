@@ -1,5 +1,4 @@
-﻿
-namespace BookRenter.Services
+﻿namespace BookRenterService.Interfaces
 {
     public interface ICheckoutService
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BookRenter.Services.Interfaces;
 using BookRenter.Models.Requests;
-using BookRenter.Services;
+using BookRenterService.Interfaces;
 
 namespace BookRenter.Controllers
 {

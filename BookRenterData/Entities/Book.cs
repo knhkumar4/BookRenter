@@ -22,11 +22,27 @@ namespace BookRenterData.Entities
         public ICollection<CartBook>? CartBooks { get; set; }
 
     }
+    public class User
+    {
+        [Key]
+        public int UserId { get; set; }
 
+        [Required]
+        public string Username { get; set; }
+
+        [Required]
+        public string PasswordHash { get; set; }
+
+        public ICollection<Cart>? Carts { get; set; }
+    }
     public class Cart
     {
         [Key]
         public int CartId { get; set; }
+
+        // Foreign key to User entity
+        public int UserId { get; set; }
+        public User User { get; set; }
 
         public ICollection<CartBook>? CartBooks { get; set; }
 
