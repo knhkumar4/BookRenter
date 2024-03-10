@@ -19,6 +19,13 @@ namespace JC.Samples.AsyncRepository.Repository
         {
             _dbContext = dbContext;
         }
+        public async Task<Inventory> GetInventoryWithBookByBookIdAsync(int bookId)
+        {
+            return await _dbContext.Inventories
+                .Include(inv => inv.Book) // Include the related Book entity
+                .FirstOrDefaultAsync(i => i.BookId == bookId);
+        }
+
 
         public async Task<Inventory> GetInventoryByBookIdAsync(int bookId)
         {

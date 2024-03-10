@@ -19,6 +19,7 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork im
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IUserClaimService, UserClaimService>();
 builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IInventoryService, InventoryService>();
 builder.Services.AddTransient<ICheckoutService, CheckoutService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICartService, CartService>();
