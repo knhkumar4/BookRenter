@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BookRenter.Services.Interfaces;
+using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterService.Folder.BookRenter.Models.Responses;
 
@@ -35,19 +36,94 @@ namespace BookRenter.Services
                 throw new ArgumentNullException(nameof(bookResponse));
             }
 
-            var book = bookResponse; // Implicit conversion from BookResponse to Book
+            // Convert BookResponse to Book entity
+            var book = bookResponse;
+
+            // Add the book to the database
             var addedBook = await _unitOfWork.BookRepository.AddAsync(book);
+
+            // Create inventory for the added book
+            var inventory = new Inventory
+            {
+                BookId = addedBook.BookId,
+                Quantity = bookResponse.Quantity, // Set the quantity provided by the user
+                CreatedDate = DateTime.UtcNow
+            };
+
+            // Add the inventory to the database
+            await _unitOfWork.InventoryRepository.AddAsync(inventory);
+
             try
             {
+                // Save changes to the database
                 await _unitOfWork.CompleteAsync();
             }
             catch (Exception ex)
             {
-
-                throw;
+                // Handle exceptions
+                throw new Exception("An error occurred while adding the book and inventory.", ex);
             }
-            
+
             return addedBook; // Implicit conversion from Book to BookResponse
+        }
+
+        public async Task<BookResponse> UpdateBookResponseAsync(int bookId, BookResponse bookResponse, int quantity)
+        {
+            if (bookResponse == null)
+            {
+                throw new ArgumentNullException(nameof(bookResponse));
+            }
+
+            // Get the book from the database by its ID
+            var existingBook = await _unitOfWork.BookRepository.GetByIdAsync(bookId);
+            if (existingBook == null)
+            {
+                throw new ArgumentException($"Book with ID {bookId} not found.", nameof(bookId));
+            }
+
+            // Update the book details
+            existingBook.Title = bookResponse.Title;
+            existingBook.Description = bookResponse.Description;
+            existingBook.Author = bookResponse.Author;
+            existingBook.Genre = bookResponse.Genre;
+            existingBook.Price = bookResponse.Price;
+           
+
+            // Update the book in the database
+            var updatedBook = await _unitOfWork.BookRepository.UpdateAsync(existingBook);
+
+            // Get the inventory for the book
+            var inventory = await _unitOfWork.InventoryRepository.GetInventoryByBookIdAsync(bookId);
+            if (inventory == null)
+            {
+                // If inventory does not exist, create a new one
+                inventory = new Inventory
+                {
+                    BookId = bookId,
+                    Quantity = quantity, // Set the quantity provided by the user
+                    CreatedDate = DateTime.UtcNow
+                };
+                await _unitOfWork.InventoryRepository.AddAsync(inventory);
+            }
+            else
+            {
+                // Update the quantity in the inventory
+                inventory.Quantity = quantity; // Set the quantity provided by the user
+                await _unitOfWork.InventoryRepository.UpdateAsync(inventory);
+            }
+
+            try
+            {
+                // Save changes to the database
+                await _unitOfWork.CompleteAsync();
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions
+                throw new Exception("An error occurred while updating the book and inventory.", ex);
+            }
+
+            return updatedBook; // Implicit conversion from Book to BookResponse
         }
 
         public async Task DeleteBookResponseAsync(int id)

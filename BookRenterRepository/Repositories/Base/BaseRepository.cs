@@ -91,6 +91,19 @@ namespace BookRenterData.Repositories.Base
         }
 
         /// <summary>
+        /// Updates an entity.
+        /// </summary>
+        /// <param name="entity">The entity to update</param>
+        /// <returns>The updated entity</returns>
+        public async Task<T> UpdateAsync(T entity)
+        {
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+
+        /// <summary>
         /// Gets a collection of entities based on the specified criteria.
         /// </summary>
         /// <param name="filter">The condition the entities must fulfil to be returned</param>

@@ -1,32 +1,37 @@
-﻿using BookRenterService.Interfaces;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using BookRenter.Services;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using BookRenterService.Interfaces;
+using Microsoft.AspNetCore.Identity.Data;
+using BookRenterService.Models;
 
-namespace BookRenterAPI.Controllers
+namespace BookRenter.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly string _jwtSecret;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IUserService userService, string jwtSecret)
+        public AuthController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
-            _jwtSecret = jwtSecret ?? throw new ArgumentNullException(nameof(jwtSecret));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest loginRequest)
+        public async Task<IActionResult> Login(UserLoginRequest loginRequest)
         {
             try
             {
-                var user = await _userService.ValidateCredentialsAsync(loginRequest.Email, loginRequest.Password);
+                var user = await _userService.ValidateCredentialsAsync(loginRequest.Username, loginRequest.Password);
                 if (user == null)
                 {
                     return Unauthorized("Invalid username or password.");
@@ -44,7 +49,7 @@ namespace BookRenterAPI.Controllers
         private string GenerateJwtToken(string username)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSecret);
+            var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

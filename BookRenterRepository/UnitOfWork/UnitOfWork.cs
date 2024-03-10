@@ -15,6 +15,7 @@ namespace BookRenterData.UnitOfWork
         private IBookRepository _bookRepository;
         private ICartBookRepository _cartBookRepository;
         private IUserRepository _userRepository;
+        private IInventoryRepository _inventoryRepository;
 
         public UnitOfWork(BookRenterContext dbContext)
         {
@@ -56,6 +57,18 @@ namespace BookRenterData.UnitOfWork
                 return _userRepository;
             }
         }
+        public IInventoryRepository InventoryRepository
+        {
+            get
+            {
+                if (_inventoryRepository == null)
+                {
+                    _inventoryRepository = new InventoryRepository(_dbContext);
+                }
+                return _inventoryRepository;
+            }
+        }
+
         
 
         public async Task CompleteAsync() => await _dbContext.SaveChangesAsync();

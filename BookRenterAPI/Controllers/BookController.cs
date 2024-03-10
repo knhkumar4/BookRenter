@@ -3,12 +3,14 @@ using BookRenter.Services;
 using BookRenter.Services.Interfaces;
 using BookRenterData.Entities;
 using BookRenterService.Folder.BookRenter.Models.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookRenter.Controllers
 {
     [ApiController]
     [Route("api/books")]
+    [Authorize]
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;

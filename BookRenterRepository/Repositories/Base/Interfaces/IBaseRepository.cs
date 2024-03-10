@@ -25,6 +25,8 @@ namespace BookRenterData.Repositories.Base.Interfaces
                                           int? skip = null,
                                           params string[] includeProperties);
 
+        Task<T> UpdateAsync(T entity);
+
         #endregion
     }
 }
