@@ -4,8 +4,6 @@ using BookRenterData.Repositories.Interfaces;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterRepository.Repositories.Interfaces;
 using JC.Samples.AsyncRepository.Repository;
-using System;
-using System.Threading.Tasks;
 
 namespace BookRenterData.UnitOfWork
 {

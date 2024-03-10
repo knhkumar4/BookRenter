@@ -5,11 +5,19 @@ VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterAPI", "BookRenterAPI\BookRenterAPI.csproj", "{824C6D47-D58D-456D-873C-BF9E0993CD4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterData", "BookRenterData\BookRenterData.csproj", "{03A73158-502E-4E35-A327-1A082DA4CD00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterData", "BookRenterData\BookRenterData.csproj", "{03A73158-502E-4E35-A327-1A082DA4CD00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterRepository", "BookRenterRepository\BookRenterRepository.csproj", "{251DEFC3-C4CF-49BD-8074-2DE14B4ED36D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterRepository", "BookRenterRepository\BookRenterRepository.csproj", "{251DEFC3-C4CF-49BD-8074-2DE14B4ED36D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterService", "BookRenterService\BookRenterService.csproj", "{3279CD5B-6557-4F71-837D-633D2ADF7FF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterService", "BookRenterService\BookRenterService.csproj", "{3279CD5B-6557-4F71-837D-633D2ADF7FF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{55AFB1DE-EB66-444A-B12E-C3675550EFA5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterRepositoryTest", "BookRenterRepositoryTest\BookRenterRepositoryTest.csproj", "{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterDataServices.Test", "BookRenterDataServices.Test\BookRenterDataServices.Test.csproj", "{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterAPI.Test", "BookRenterAPI.Test\BookRenterAPI.Test.csproj", "{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +41,26 @@ Global
 		{3279CD5B-6557-4F71-837D-633D2ADF7FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3279CD5B-6557-4F71-837D-633D2ADF7FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3279CD5B-6557-4F71-837D-633D2ADF7FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
+		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
+		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CECD5ABD-178B-442A-8CDD-6B5DC7150D5F}
