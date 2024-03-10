@@ -1,6 +1,6 @@
 ﻿using BookRenterData.Entities;
 
-namespace BookRenterService.Concrete
+namespace BookRenterService.Interfaces
 {
     public interface IUserClaimService
     {

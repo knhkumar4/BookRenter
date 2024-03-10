@@ -1,6 +1,7 @@
 ﻿using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterRepository.Repositories.Interfaces;
+using BookRenterService.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

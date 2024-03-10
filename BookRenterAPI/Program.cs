@@ -21,7 +21,7 @@ builder.Services.AddTransient<IUserClaimService, UserClaimService>();
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<ICheckoutService, CheckoutService>();
 builder.Services.AddTransient<IUserService, UserService>();
-
+builder.Services.AddTransient<ICartService, CartService>();
 
 //builder.Services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
 //builder.Services.AddSingleton(Configuration.GetSection("JwtSettings").Get<JwtSettings>());

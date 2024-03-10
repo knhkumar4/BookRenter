@@ -21,6 +21,7 @@ namespace BookRenterData.Repositories
         public async Task<IEnumerable<CartBook>> GetByUserIdAsync(int userId)
         {
             return await _dbContext.CartBooks
+                .Include(cb => cb.Book) 
                 .Where(cb => cb.UserId == userId)
                 .ToListAsync();
         }

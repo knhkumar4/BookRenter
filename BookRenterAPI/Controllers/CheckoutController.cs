@@ -1,14 +1,12 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using BookRenterService.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BookRenter.Services.Interfaces;
-using BookRenter.Models.Requests;
-using BookRenterService.Interfaces;
 
 namespace BookRenter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CheckoutController : ControllerBase
     {
         private readonly ICheckoutService _checkoutService;
@@ -18,47 +16,21 @@ namespace BookRenter.Controllers
             _checkoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
         }
 
-        [HttpPost("AddToCart")]
-        public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
-        {
-            try
-            {
-                var isSuccess = await _checkoutService.AddBookToCartAsync(request.BookId);
-
-                if (isSuccess)
-                {
-                    return Ok("Book added to cart successfully.");
-                }
-                else
-                {
-                    return BadRequest("The book is already in the cart.");
-                }
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "An error occurred while processing the request.");
-            }
-        }
-
-
         [HttpPost]
-        [Route("checkout")]
-        public async Task<ActionResult<string>> CheckoutBooksAsync()
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ApiResponse<string>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ApiResponse<string>))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(ApiResponse<string>))]
+        public async Task<ActionResult<ApiResponse<string>>> CheckoutBooksAsync()
         {
             try
             {
                 var result = await _checkoutService.CheckoutBooksAsync();
-                return Ok(result);
+                return Ok(new ApiResponse<string>(true, "Checkout successful.", result));
             }
             catch (Exception ex)
             {
                 // Log the exception
-                return StatusCode(500, "An error occurred while processing the checkout.");
+                return StatusCode(500, new ApiResponse<string>(false, "An error occurred while processing the checkout."));
             }
         }
     }
