@@ -2,6 +2,7 @@
 {
     public interface ICheckoutService
     {
-        Task<bool> AddBookToCartAsync(int bookId, int cartId);
+        Task<bool> AddBookToCartAsync(int bookId);
+        Task<string> CheckoutBooksAsync();
     }
 }

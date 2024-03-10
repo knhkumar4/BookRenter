@@ -12,7 +12,6 @@ namespace BookRenterData.Context
         // DbSet for each entity
 
         public DbSet<Book> Books { get; set; }
-        public DbSet<Cart> Carts { get; set; }
         public DbSet<CartBook> CartBooks { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<User> Users { get; set; }
@@ -20,25 +19,26 @@ namespace BookRenterData.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configure relationships, keys, and other entity configurations
-            // Configure many-to-many relationship between Book and Cart
-            modelBuilder.Entity<CartBook>()
-                .HasKey(cb => new { cb.CartId, cb.BookId });
 
-            modelBuilder.Entity<CartBook>()
-                .HasOne(cb => cb.Cart)
-                .WithMany(c => c.CartBooks)
-                .HasForeignKey(cb => cb.CartId);
+            // Configure many-to-many relationship between Book and User (via CartBook)
+            //modelBuilder.Entity<CartBook>()
+            //    .HasKey(cb => new { cb.UserId, cb.BookId });
 
-            modelBuilder.Entity<CartBook>()
-                .HasOne(cb => cb.Book)
-                .WithMany(b => b.CartBooks)
-                .HasForeignKey(cb => cb.BookId);
+            //modelBuilder.Entity<CartBook>()
+            //    .HasOne(cb => cb.User)
+            //    .WithMany(u => u.CartBooks)
+            //    .HasForeignKey(cb => cb.UserId);
 
-            // Configure one-to-many relationship between User and Cart
-            modelBuilder.Entity<Cart>()
-                .HasOne(c => c.User)
-                .WithMany(u => u.Carts)
-                .HasForeignKey(c => c.UserId);
+            //modelBuilder.Entity<CartBook>()
+            //    .HasOne(cb => cb.Book)
+            //    .WithMany()
+            //    .HasForeignKey(cb => cb.BookId);
+
+            //// Configure one-to-many relationship between Book and Inventory
+            //modelBuilder.Entity<Inventory>()
+            //    .HasOne(i => i.Book)
+            //    .WithMany(b => b.Inventories)
+            //    .HasForeignKey(i => i.BookId);
         }
     }
 }

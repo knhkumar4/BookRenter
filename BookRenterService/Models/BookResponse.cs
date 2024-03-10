@@ -19,6 +19,7 @@ namespace BookRenterService.Folder
             public string Description { get; set; }
             public string Genre { get; set; }
             public double Price { get; set; }
+            public double? RentPrice { get; set; }
             public int Quantity { get; set; }
 
             public static implicit operator BookResponse(Book book)
@@ -35,7 +36,9 @@ namespace BookRenterService.Folder
                     Author = book.Author,
                     Description = book.Description,
                     Genre = book.Genre,
-                    Price = book.Price
+                    Price = book.Price,
+                    RentPrice = book.RentPrice,
+                    
                 };
             }
 
@@ -54,8 +57,9 @@ namespace BookRenterService.Folder
                     Description = bookResponse.Description,
                     Genre = bookResponse.Genre,
                     Price = bookResponse.Price,
-                    CreatedDate = DateTime.UtcNow
-                    
+                    CreatedDate = DateTime.UtcNow,
+                    RentPrice = bookResponse.RentPrice
+
                 };
             }
         }

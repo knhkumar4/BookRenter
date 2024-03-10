@@ -42,16 +42,16 @@ namespace BookRenter.Services
             // Add the book to the database
             var addedBook = await _unitOfWork.BookRepository.AddAsync(book);
 
-            // Create inventory for the added book
-            var inventory = new Inventory
-            {
-                BookId = addedBook.BookId,
-                Quantity = bookResponse.Quantity, // Set the quantity provided by the user
-                CreatedDate = DateTime.UtcNow
-            };
+            //// Create inventory for the added book
+            //var inventory = new Inventory
+            //{
+            //    BookId = addedBook.BookId,
+            //    Quantity = bookResponse.Quantity, // Set the quantity provided by the user
+            //    CreatedDate = DateTime.UtcNow
+            //};
 
             // Add the inventory to the database
-            await _unitOfWork.InventoryRepository.AddAsync(inventory);
+          //  await _unitOfWork.InventoryRepository.AddAsync(inventory);
 
             try
             {
@@ -67,9 +67,11 @@ namespace BookRenter.Services
             return addedBook; // Implicit conversion from Book to BookResponse
         }
 
-        public async Task<BookResponse> UpdateBookResponseAsync(int bookId, BookResponse bookResponse, int quantity)
+        public async Task<BookResponse> UpdateBookResponseAsync(int bookId, BookResponse bookResponse)
         {
-            if (bookResponse == null)
+            try
+            {
+                if (bookResponse == null)
             {
                 throw new ArgumentNullException(nameof(bookResponse));
             }
@@ -100,7 +102,7 @@ namespace BookRenter.Services
                 inventory = new Inventory
                 {
                     BookId = bookId,
-                    Quantity = quantity, // Set the quantity provided by the user
+                    Quantity = bookResponse.Quantity, // Set the quantity provided by the user
                     CreatedDate = DateTime.UtcNow
                 };
                 await _unitOfWork.InventoryRepository.AddAsync(inventory);
@@ -108,14 +110,14 @@ namespace BookRenter.Services
             else
             {
                 // Update the quantity in the inventory
-                inventory.Quantity = quantity; // Set the quantity provided by the user
+                inventory.Quantity = bookResponse.Quantity; // Set the quantity provided by the user
                 await _unitOfWork.InventoryRepository.UpdateAsync(inventory);
             }
 
-            try
-            {
+           
                 // Save changes to the database
                 await _unitOfWork.CompleteAsync();
+                return updatedBook;
             }
             catch (Exception ex)
             {
@@ -123,7 +125,7 @@ namespace BookRenter.Services
                 throw new Exception("An error occurred while updating the book and inventory.", ex);
             }
 
-            return updatedBook; // Implicit conversion from Book to BookResponse
+             // Implicit conversion from Book to BookResponse
         }
 
         public async Task DeleteBookResponseAsync(int id)

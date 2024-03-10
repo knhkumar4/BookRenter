@@ -10,14 +10,19 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using BookRenterService.Concrete;
 
 
 var builder = WebApplication.CreateBuilder(args);
 // Add your services
-builder.Services.AddTransient<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork implements IUnitOfWork
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork implements IUnitOfWork
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddTransient<IUserClaimService, UserClaimService>();
 builder.Services.AddTransient<IBookService, BookService>();
 builder.Services.AddTransient<ICheckoutService, CheckoutService>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+
 //builder.Services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
 //builder.Services.AddSingleton(Configuration.GetSection("JwtSettings").Get<JwtSettings>());
 

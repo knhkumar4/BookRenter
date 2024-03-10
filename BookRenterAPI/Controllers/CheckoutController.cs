@@ -18,12 +18,12 @@ namespace BookRenter.Controllers
             _checkoutService = checkoutService ?? throw new ArgumentNullException(nameof(checkoutService));
         }
 
-        [HttpPost("add-to-cart")]
+        [HttpPost("AddToCart")]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
         {
             try
             {
-                var isSuccess = await _checkoutService.AddBookToCartAsync(request.BookId, request.CartId);
+                var isSuccess = await _checkoutService.AddBookToCartAsync(request.BookId);
 
                 if (isSuccess)
                 {
@@ -42,6 +42,23 @@ namespace BookRenter.Controllers
             {
                 // Log the exception
                 return StatusCode(500, "An error occurred while processing the request.");
+            }
+        }
+
+
+        [HttpPost]
+        [Route("checkout")]
+        public async Task<ActionResult<string>> CheckoutBooksAsync()
+        {
+            try
+            {
+                var result = await _checkoutService.CheckoutBooksAsync();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, "An error occurred while processing the checkout.");
             }
         }
     }

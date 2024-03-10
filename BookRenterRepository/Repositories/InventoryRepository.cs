@@ -24,5 +24,7 @@ namespace JC.Samples.AsyncRepository.Repository
         {
             return await _dbContext.Inventories.FirstOrDefaultAsync(i => i.BookId == bookId);
         }
+
+
     }
 }

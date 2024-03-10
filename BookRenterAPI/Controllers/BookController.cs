@@ -45,6 +45,31 @@ namespace BookRenter.Controllers
             return CreatedAtAction(nameof(GetBookById), new { id = addedBookResponse.BookId }, addedBookResponse);
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<BookResponse>> UpdateBook(int id, BookResponse bookResponse)
+        {
+            try
+            {
+                // Check if the provided book ID matches the ID in the request body
+                if (id != bookResponse.BookId)
+                {
+                    return BadRequest("Book ID in the request body does not match the ID in the URL.");
+                }
+
+                // Update the book using the service
+                var updatedBookResponse = await _bookService.UpdateBookResponseAsync(id, bookResponse);
+
+                // Return the updated book response
+                return Ok(updatedBookResponse);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                return StatusCode(500, "An error occurred while updating the book.");
+            }
+        }
+
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteBookResponse(int id)
         {

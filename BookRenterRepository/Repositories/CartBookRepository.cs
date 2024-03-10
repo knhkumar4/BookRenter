@@ -18,16 +18,33 @@ namespace BookRenterData.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<CartBook> GetByBookIdAndCartIdAsync(int bookId, int cartId)
+        public async Task<IEnumerable<CartBook>> GetByUserIdAsync(int userId)
         {
             return await _dbContext.CartBooks
-                .FirstOrDefaultAsync(cb => cb.BookId == bookId && cb.CartId == cartId);
+                .Where(cb => cb.UserId == userId)
+                .ToListAsync();
         }
 
-        public async Task<int> GetCartItemCountAsync(int cartId)
+        public async Task<CartBook> GetByBookIdAndUserIdAsync(int bookId, int userId)
         {
             return await _dbContext.CartBooks
-                .CountAsync(cb => cb.CartId == cartId);
+               .FirstOrDefaultAsync(cb => cb.BookId == bookId && cb.UserId == userId);            
+           
+        }
+
+        public async Task<IEnumerable<CartBook>> GetCartBooksByUserIdAsync(int userId)
+        {
+            return await _dbContext.CartBooks
+                .Where(cb => cb.UserId == userId)
+                .ToListAsync();
+        }
+
+
+        public async Task<int> GetCartItemCountAsync(int userId)
+        {
+            return await _dbContext.CartBooks
+                .CountAsync(cb => cb.UserId == userId);
         }
     }
+
 }
