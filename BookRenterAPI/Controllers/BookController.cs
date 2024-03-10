@@ -1,15 +1,12 @@
-﻿
-using BookRenter.Services;
+﻿using BookRenter.Models.Responses;
 using BookRenter.Services.Interfaces;
-using BookRenterData.Entities;
-using BookRenterService.Folder.BookRenter.Models.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookRenter.Controllers
 {
     [ApiController]
-    [Route("api/books")]
+    [Route("api/[controller]")]
     [Authorize]
     public class BookController : ControllerBase
     {
@@ -20,7 +17,16 @@ namespace BookRenter.Controllers
             _bookService = bookService ?? throw new ArgumentNullException(nameof(bookService));
         }
 
+        /// <summary>
+        /// Retrieves a book by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the book.</param>
+        /// <returns>The book with the specified ID.</returns>
+        /// <response code="200">Returns the book with the specified ID.</response>
+        /// <response code="404">If no book is found with the specified ID.</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(BookResponse))]
+        [ProducesResponseType(404)]
         public async Task<ActionResult<BookResponse>> GetBookById(int id)
         {
             var bookResponse = await _bookService.GetBookResponseByIdAsync(id);
@@ -31,33 +37,58 @@ namespace BookRenter.Controllers
             return Ok(bookResponse);
         }
 
+        /// <summary>
+        /// Retrieves all books.
+        /// </summary>
+        /// <returns>A list of all books.</returns>
+        /// <response code="200">Returns the list of all books.</response>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookResponse>>> GetAllBookResponses()
+        [ProducesResponseType(200, Type = typeof(IEnumerable<BookResponse>))]
+        public async Task<ActionResult<IEnumerable<BookResponse>>> GetAllBooks()
         {
             var bookResponses = await _bookService.GetAllBookResponsesAsync();
             return Ok(bookResponses);
         }
 
+        /// <summary>
+        /// Adds a new book.
+        /// </summary>
+        /// <param name="bookRequest">The book to add.</param>
+        /// <returns>The added book.</returns>
+        /// <response code="201">Returns the added book.</response>
         [HttpPost]
-        public async Task<ActionResult<BookResponse>> AddBook(BookResponse bookResponse)
+        [ProducesResponseType(201, Type = typeof(BookResponse))]
+        public async Task<ActionResult<BookResponse>> AddBook(BookRequest bookRequest)
         {
-            var addedBookResponse = await _bookService.AddBookResponseAsync(bookResponse);
+            var addedBookResponse = await _bookService.AddBookAsync(bookRequest);
             return CreatedAtAction(nameof(GetBookById), new { id = addedBookResponse.BookId }, addedBookResponse);
         }
 
+        /// <summary>
+        /// Updates an existing book.
+        /// </summary>
+        /// <param name="id">The ID of the book to update.</param>
+        /// <param name="bookRequest">The updated book data.</param>
+        /// <returns>The updated book.</returns>
+        /// <response code="200">Returns the updated book.</response>
+        /// <response code="400">If the provided book ID does not match the ID in the request body.</response>
+        /// <response code="500">If an error occurs while updating the book.</response>
         [HttpPut("{id}")]
-        public async Task<ActionResult<BookResponse>> UpdateBook(int id, BookResponse bookResponse)
+        [ProducesResponseType(200, Type = typeof(BookResponse))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<ActionResult<BookResponse>> UpdateBook(int id, BookRequest bookRequest)
         {
             try
             {
                 // Check if the provided book ID matches the ID in the request body
-                if (id != bookResponse.BookId)
+                if (id != bookRequest.BookId)
                 {
                     return BadRequest("Book ID in the request body does not match the ID in the URL.");
                 }
 
                 // Update the book using the service
-                var updatedBookResponse = await _bookService.UpdateBookResponseAsync(id, bookResponse);
+                var updatedBookResponse = await _bookService.UpdateBookAsync(id, bookRequest);
 
                 // Return the updated book response
                 return Ok(updatedBookResponse);
@@ -66,34 +97,6 @@ namespace BookRenter.Controllers
             {
                 // Log the exception
                 return StatusCode(500, "An error occurred while updating the book.");
-            }
-        }
-
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteBookResponse(int id)
-        {
-            await _bookService.DeleteBookResponseAsync(id);
-            return NoContent();
-        }
-
-        [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<BookResponse>>> SearchBooksAsync([FromQuery] string searchTerm)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(searchTerm))
-                {
-                    return BadRequest("Search term cannot be empty");
-                }
-
-                var searchResults = await _bookService.SearchBooksAsync(searchTerm);
-                return Ok(searchResults);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception
-                return StatusCode(500, "An error occurred while searching for books.");
             }
         }
     }

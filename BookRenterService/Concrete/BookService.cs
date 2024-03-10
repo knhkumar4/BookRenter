@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using BookRenter.Models.Responses;
 using BookRenter.Services.Interfaces;
 using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
-using BookRenterService.Folder.BookRenter.Models.Responses;
+using BookRenterService.Models;
 
 namespace BookRenter.Services
 {
@@ -29,15 +27,15 @@ namespace BookRenter.Services
             return books.Select(book => (BookResponse)book); // Explicit conversion of each Book to BookResponse
         }
 
-        public async Task<BookResponse> AddBookResponseAsync(BookResponse bookResponse)
+        public async Task<BookResponse> AddBookAsync(BookRequest bookRequest)
         {
-            if (bookResponse == null)
+            if (bookRequest == null)
             {
-                throw new ArgumentNullException(nameof(bookResponse));
+                throw new ArgumentNullException(nameof(bookRequest));
             }
 
             // Convert BookResponse to Book entity
-            var book = bookResponse;
+            var book = bookRequest;
 
             // Add the book to the database
             var addedBook = await _unitOfWork.BookRepository.AddAsync(book);
@@ -67,13 +65,13 @@ namespace BookRenter.Services
             return addedBook; // Implicit conversion from Book to BookResponse
         }
 
-        public async Task<BookResponse> UpdateBookResponseAsync(int bookId, BookResponse bookResponse)
+        public async Task<BookResponse> UpdateBookAsync(int bookId, BookRequest bookRequest)
         {
             try
             {
-                if (bookResponse == null)
+                if (bookRequest == null)
             {
-                throw new ArgumentNullException(nameof(bookResponse));
+                throw new ArgumentNullException(nameof(bookRequest));
             }
 
             // Get the book from the database by its ID
@@ -84,11 +82,11 @@ namespace BookRenter.Services
             }
 
             // Update the book details
-            existingBook.Title = bookResponse.Title;
-            existingBook.Description = bookResponse.Description;
-            existingBook.Author = bookResponse.Author;
-            existingBook.Genre = bookResponse.Genre;
-            existingBook.Price = bookResponse.Price;
+            existingBook.Title = bookRequest.Title;
+            existingBook.Description = bookRequest.Description;
+            existingBook.Author = bookRequest.Author;
+            existingBook.Genre = bookRequest.Genre;
+            existingBook.Price = bookRequest.Price;
            
 
             // Update the book in the database
@@ -102,7 +100,7 @@ namespace BookRenter.Services
                 inventory = new Inventory
                 {
                     BookId = bookId,
-                    Quantity = bookResponse.Quantity, // Set the quantity provided by the user
+                    Quantity = bookRequest.Quantity, // Set the quantity provided by the user
                     CreatedDate = DateTime.UtcNow
                 };
                 await _unitOfWork.InventoryRepository.AddAsync(inventory);
@@ -110,7 +108,7 @@ namespace BookRenter.Services
             else
             {
                 // Update the quantity in the inventory
-                inventory.Quantity = bookResponse.Quantity; // Set the quantity provided by the user
+                inventory.Quantity = bookRequest.Quantity; // Set the quantity provided by the user
                 await _unitOfWork.InventoryRepository.UpdateAsync(inventory);
             }
 
@@ -139,7 +137,7 @@ namespace BookRenter.Services
             await _unitOfWork.BookRepository.DeleteAsync(book);
         }
 
-        public async Task<IEnumerable<BookResponse>> SearchBooksAsync(string searchTerm)
+        public async Task<IEnumerable<SearchBookResponse>> SearchBooksAsync(string searchTerm)
         {
             // Search by book title or author
             var books = await _unitOfWork.BookRepository.GetManyAsync(
@@ -147,7 +145,7 @@ namespace BookRenter.Services
             );
 
             // Convert domain model to DTO
-            var bookResponses = books.Select(book => (BookResponse)book);
+            var bookResponses = books.Select(book => (SearchBookResponse)book);
 
             return bookResponses;
         }

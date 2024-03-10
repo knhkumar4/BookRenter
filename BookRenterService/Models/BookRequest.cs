@@ -3,7 +3,7 @@ using BookRenterData.Entities;
 
 namespace BookRenter.Models.Responses
 {
-    public class BookResponse
+    public class BookRequest
     {
         public int BookId { get; set; }
         public string Title { get; set; }
@@ -12,16 +12,16 @@ namespace BookRenter.Models.Responses
         public string Genre { get; set; }
         public double Price { get; set; }
         public double? RentPrice { get; set; }
-     
+        public int Quantity { get; set; }
 
-        public static implicit operator BookResponse(Book book)
+        public static implicit operator BookRequest(Book book)
         {
             if (book == null)
             {
                 return null;
             }
 
-            return new BookResponse
+            return new BookRequest
             {
                 BookId = book.BookId,
                 Title = book.Title,
@@ -34,23 +34,23 @@ namespace BookRenter.Models.Responses
             };
         }
 
-        public static implicit operator Book(BookResponse bookResponse)
+        public static implicit operator Book(BookRequest bookResponseRequest)
         {
-            if (bookResponse == null)
+            if (bookResponseRequest == null)
             {
                 return null;
             }
 
             return new Book
             {
-                BookId = bookResponse.BookId,
-                Title = bookResponse.Title,
-                Author = bookResponse.Author,
-                Description = bookResponse.Description,
-                Genre = bookResponse.Genre,
-                Price = bookResponse.Price,
+                BookId = bookResponseRequest.BookId,
+                Title = bookResponseRequest.Title,
+                Author = bookResponseRequest.Author,
+                Description = bookResponseRequest.Description,
+                Genre = bookResponseRequest.Genre,
+                Price = bookResponseRequest.Price,
                 CreatedDate = DateTime.UtcNow,
-                RentPrice = bookResponse.RentPrice
+                RentPrice = bookResponseRequest.RentPrice
 
             };
         }
