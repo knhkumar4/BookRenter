@@ -9,8 +9,6 @@ namespace BookRenterData.Context
         {
         }
 
-        // DbSet for each entity
-
         public DbSet<Book> Books { get; set; }
         public DbSet<CartBook> CartBooks { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
@@ -18,9 +16,19 @@ namespace BookRenterData.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure relationships, keys, and other entity configurations
+            base.OnModelCreating(modelBuilder);
 
-            // Configure many-to-many relationship between Book and User (via CartBook)
+            //// Configuring one-to-one relationship between Book and Inventory
+            modelBuilder.Entity<Book>()
+                .HasOne<Inventory>(b => b.Inventory)
+                .WithOne(i => i.Book)
+                .HasForeignKey<Inventory>(i => i.BookId);
+
+            //// Configure the primary key for Inventory to be the same as BookId
+            //modelBuilder.Entity<Inventory>()
+            //    .HasKey(i => i.BookId);
+
+            //// Configure many-to-many relationship between Book and User (via CartBook)
             //modelBuilder.Entity<CartBook>()
             //    .HasKey(cb => new { cb.UserId, cb.BookId });
 
@@ -29,16 +37,7 @@ namespace BookRenterData.Context
             //    .WithMany(u => u.CartBooks)
             //    .HasForeignKey(cb => cb.UserId);
 
-            //modelBuilder.Entity<CartBook>()
-            //    .HasOne(cb => cb.Book)
-            //    .WithMany()
-            //    .HasForeignKey(cb => cb.BookId);
 
-            //// Configure one-to-many relationship between Book and Inventory
-            //modelBuilder.Entity<Inventory>()
-            //    .HasOne(i => i.Book)
-            //    .WithMany(b => b.Inventories)
-            //    .HasForeignKey(i => i.BookId);
         }
     }
 }

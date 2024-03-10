@@ -1,101 +1,104 @@
-using BookRenterData.Context;
-using BookRenterData.UnitOfWork.Interfaces;
-using BookRenterData.UnitOfWork;
-using Microsoft.EntityFrameworkCore;
-using BookRenter.Services.Interfaces;
 using BookRenter.Services;
-using BookRenterService.Interfaces;
-using BookRenterService.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
+using BookRenter.Services.Interfaces;
+using BookRenterData.Context;
+using BookRenterData.UnitOfWork;
+using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterService.Concrete;
-
+using BookRenterService.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add your services
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Assuming UnitOfWork implements IUnitOfWork
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddTransient<IUserClaimService, UserClaimService>();
-builder.Services.AddTransient<IBookService, BookService>();
-builder.Services.AddTransient<IInventoryService, InventoryService>();
-builder.Services.AddTransient<ICheckoutService, CheckoutService>();
-builder.Services.AddTransient<IUserService, UserService>();
-builder.Services.AddTransient<ICartService, CartService>();
 
-//builder.Services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-//builder.Services.AddSingleton(Configuration.GetSection("JwtSettings").Get<JwtSettings>());
-
-// Configure JWT authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = false, // Set to true if you want to validate the issuer
-            ValidateAudience = false, // Set to true if you want to validate the audience
-            ValidateLifetime = true, // Validate token expiration
-            ValidateIssuerSigningKey = true, // Validate the signing key
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtSettings:Secret"]))
-        };
-    });
-
-
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Your API", Version = "v1" });
-
-    // Configure JWT Bearer authentication
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = "Bearer"
-    });
-
-    // Configure JWT Bearer token authentication
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-
-
-// Add DbContext and specify connection string
-builder.Services.AddDbContext<BookRenterContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("BookRenterDatabase")));
-
-
+// Configure services
+ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();    
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API v1"));
+ConfigureApp(app);
 
+app.Run();
+
+void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+{
+    // DbContext and UnitOfWork
+    services.AddDbContext<BookRenterContext>(options =>
+        options.UseSqlServer(configuration.GetConnectionString("BookRenterDatabase")));
+    services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+    // HTTP Context Accessor
+    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+    // Domain Services
+    services.AddTransient<IUserClaimService, UserClaimService>();
+    services.AddTransient<IBookService, BookService>();
+    services.AddTransient<IInventoryService, InventoryService>();
+    services.AddTransient<ICheckoutService, CheckoutService>();
+    services.AddTransient<IUserService, UserService>();
+    services.AddTransient<ICartService, CartService>();
+
+    // JWT Authentication
+    services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JwtSettings:Secret"]))
+            };
+        });
+
+    // MVC Controllers
+    services.AddControllers();
+
+    // Swagger
+    services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookRenter API", Version = "v1" });
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Description = "JWT Authorization header using the Bearer scheme. Enter 'Bearer' [space] and then your token in the text input below.",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    });
 }
 
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization(); 
-app.MapControllers();
-app.Run();
+void ConfigureApp(WebApplication app)
+{
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BookRenter API v1"));
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+
+    app.MapControllers();
+}

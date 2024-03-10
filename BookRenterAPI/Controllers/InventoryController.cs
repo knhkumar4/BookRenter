@@ -1,5 +1,5 @@
-﻿using BookRenter.Services;
-using BookRenter.Services.Models;
+﻿using BookRenter.Services.Models;
+using BookRenterService.Interfaces;
 using BookRenterService.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;

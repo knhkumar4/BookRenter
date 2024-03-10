@@ -1,7 +1,7 @@
 ﻿using BookRenter.Services.Models;
 using BookRenterService.Models;
 
-namespace BookRenter.Services
+namespace BookRenterService.Interfaces
 {
 
     public interface IInventoryService

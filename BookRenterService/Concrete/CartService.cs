@@ -49,7 +49,6 @@ namespace BookRenter.Services
             };
             await _unitOfWork.CartBookRepository.AddAsync(newCartItem);
             await _unitOfWork.CompleteAsync();
-
             return true;
 
         }

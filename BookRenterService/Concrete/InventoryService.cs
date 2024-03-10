@@ -1,13 +1,8 @@
-﻿using BookRenter.Models.Responses;
-using BookRenter.Services.Interfaces;
-using BookRenter.Services.Models;
+﻿using BookRenter.Services.Models;
 using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
+using BookRenterService.Interfaces;
 using BookRenterService.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookRenter.Services
 {
@@ -22,13 +17,13 @@ namespace BookRenter.Services
 
         public async Task<InventoryResponse> GetInventoryByBookIdAsync(int bookId)
         {
-            var inventory = await _unitOfWork.InventoryRepository.GetInventoryByBookIdAsync(bookId);
+            var inventory = await _unitOfWork.InventoryRepository.GetInventoryWithBookByBookIdAsync(bookId);
             return (InventoryResponse)inventory; // Explicit conversion of Inventory to InventoryResponse
         }
 
         public async Task<IEnumerable<InventoryResponse>> GetAllInventoriesAsync()
         {
-            var inventories = await _unitOfWork.InventoryRepository.GetAllAsync();
+            var inventories = await _unitOfWork.InventoryRepository.GetAllInventoriesWithBooksAsync();
             return inventories.Select(inv => (InventoryResponse)inv); // Explicit conversion of each Inventory to InventoryResponse
         }
 
@@ -53,7 +48,6 @@ namespace BookRenter.Services
             }
             else
             {
-                // Update the existing inventory
                 existingInventory.Quantity = inventoryRequest.Quantity;
                 await _unitOfWork.InventoryRepository.UpdateAsync(existingInventory);
             }

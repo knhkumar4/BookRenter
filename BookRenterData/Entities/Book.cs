@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BookRenterData.Entities
 {
@@ -10,14 +7,16 @@ namespace BookRenterData.Entities
         [Key]
         public int BookId { get; set; }
 
-        [Required]
+        [Required, MaxLength(255)]
         public string Title { get; set; }
 
+        [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
+        [Required, MaxLength(255)]
         public string Author { get; set; }
 
+        [MaxLength(100)]
         public string Genre { get; set; }
 
         public double Price { get; set; }
@@ -27,63 +26,7 @@ namespace BookRenterData.Entities
         [Required]
         public DateTime CreatedDate { get; set; }
 
-        public ICollection<CartBook>? CartBooks { get; set; }
-        public ICollection<Inventory>? Inventories { get; set; }
-    }
-
-    public class User
-    {
-        [Key]
-        public int UserId { get; set; }
-
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        public string PasswordHash { get; set; }
-
-        public ICollection<CartBook>? CartBooks { get; set; }
-    }
-
-    public class CartBook
-    {
-        [Key]
-        public int CartBookId { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
-
-        [ForeignKey("UserId")]
-        public User User { get; set; }
-
-        [Required]
-        public int BookId { get; set; }
-
-        [ForeignKey("BookId")]
-        public Book? Book { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
-    }
-
-    public class Inventory
-    {
-        [Key]
-        public int InventoryId { get; set; }
-
-        [Required]
-        public int BookId { get; set; }
-
-        [ForeignKey("BookId")]
-        public Book? Book { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; }
+        // Navigation properties
+        public virtual Inventory Inventory { get; set; }
     }
 }

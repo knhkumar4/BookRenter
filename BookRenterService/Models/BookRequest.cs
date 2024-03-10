@@ -11,8 +11,7 @@ namespace BookRenter.Models.Responses
         public string Description { get; set; }
         public string Genre { get; set; }
         public double Price { get; set; }
-        public double? RentPrice { get; set; }
-        public int Quantity { get; set; }
+        public double? RentPrice { get; set; }      
 
         public static implicit operator BookRequest(Book book)
         {
