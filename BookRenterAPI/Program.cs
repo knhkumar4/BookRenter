@@ -102,11 +102,7 @@ void ConfigureApp(WebApplication app)
 {
     app.UseRouting(); 
 
-    app.UseEndpoints(endpoints =>
-    {
-        // Map health check endpoint
-        endpoints.MapHealthChecks("/health");
-    });
+   
 
     app.UseExceptionMiddleware();
 
@@ -122,4 +118,9 @@ void ConfigureApp(WebApplication app)
     app.UseAuthorization();
 
     app.MapControllers();
+    app.UseEndpoints(endpoints =>
+    {
+        // Map health check endpoint
+        endpoints.MapHealthChecks("/health");
+    });
 }

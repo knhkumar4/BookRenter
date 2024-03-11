@@ -13,11 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterService", "BookRe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{55AFB1DE-EB66-444A-B12E-C3675550EFA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterRepositoryTest", "BookRenterRepositoryTest\BookRenterRepositoryTest.csproj", "{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterRepositoryTest", "BookRenterRepositoryTest\BookRenterRepositoryTest.csproj", "{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterDataServices.Test", "BookRenterDataServices.Test\BookRenterDataServices.Test.csproj", "{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterDataServices.Test", "BookRenterDataServices.Test\BookRenterDataServices.Test.csproj", "{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterAPI.Test", "BookRenterAPI.Test\BookRenterAPI.Test.csproj", "{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterAPI.Test", "BookRenterAPI.Test\BookRenterAPI.Test.csproj", "{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
