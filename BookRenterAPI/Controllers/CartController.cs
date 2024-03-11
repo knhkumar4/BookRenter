@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using BookRenter.Models.Requests;
-using BookRenter.Services.Interfaces;
 using BookRenterService.Models;
 using BookRenterService.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using BookRenterService.FluentValidator;
 
 namespace BookRenter.Controllers
 {
@@ -36,6 +32,13 @@ namespace BookRenter.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
         {
+            // Validate the request
+            var validationResult = await new AddToCartRequestValidator().ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(new ApiResponse<string>(false, validationResult.Errors.First().ErrorMessage));
+            }
+
             try
             {
                 var isSuccess = await _cartService.AddBookToCartAsync(request.BookId);

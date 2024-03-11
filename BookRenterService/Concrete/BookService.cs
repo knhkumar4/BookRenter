@@ -67,6 +67,7 @@ namespace BookRenter.Services
             existingBook.Author = bookRequest.Author;
             existingBook.Genre = bookRequest.Genre;
             existingBook.Price = bookRequest.Price;
+            existingBook.RentPrice = bookRequest.RentPrice;
 
             var updatedBook = await _unitOfWork.BookRepository.UpdateAsync(existingBook);
             await _unitOfWork.CompleteAsync();

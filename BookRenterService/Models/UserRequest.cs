@@ -11,14 +11,15 @@ namespace BookRenterService.Models
     {
         public string Username { get; set; }
         public string Password { get; set; }
-      
+        public string Role { get; set; }
+
         public static implicit operator User(UserRequest userRequest)
         {
             return new User
             {
                 Username = userRequest.Username,
-                PasswordHash = userRequest.Password               
-               
+                PasswordHash = userRequest.Password,
+                Role = userRequest.Role
             };
         }
     }

@@ -12,7 +12,8 @@ namespace BookRenterData.Entities
 
         [Required]
         public string PasswordHash { get; set; }
-
+        
+        public string Role { get; set; }
         // Navigation properties
         public virtual ICollection<CartBook> CartBooks { get; set; } 
     }

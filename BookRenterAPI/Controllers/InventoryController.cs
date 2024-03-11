@@ -1,6 +1,8 @@
 ﻿using BookRenter.Services.Models;
+using BookRenterService.FluentValidator;
 using BookRenterService.Interfaces;
 using BookRenterService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -8,6 +10,7 @@ namespace BookRenter.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]
     public class InventoryController : ControllerBase
     {
         private readonly IInventoryService _inventoryService;
@@ -43,9 +46,11 @@ namespace BookRenter.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult<InventoryResponse>> AddInventory(InventoryRequest inventoryRequest)
         {
-            if (inventoryRequest == null)
+            // Validate the request
+            var validationResult = await new InventoryRequestValidator().ValidateAsync(inventoryRequest);
+            if (!validationResult.IsValid)
             {
-                return BadRequest();
+                return BadRequest(validationResult.Errors.First().ErrorMessage);
             }
 
             try

@@ -1,7 +1,9 @@
-﻿namespace BookRenterService.Interfaces
+﻿using BookRenterService.Models;
+
+namespace BookRenterService.Interfaces
 {
     public interface ICheckoutService
-    {     
-        Task<string> CheckoutBooksAsync();
+    {
+        Task<CheckoutResponse> CheckoutBooksAsync();
     }
 }

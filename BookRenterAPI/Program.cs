@@ -1,10 +1,12 @@
 using BookRenter.Services;
 using BookRenter.Services.Interfaces;
+using BookRenterAPI;
 using BookRenterData.Context;
 using BookRenterData.UnitOfWork;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterService.Concrete;
 using BookRenterService.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -31,7 +33,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddScoped<IUnitOfWork, UnitOfWork>();
 
     // HTTP Context Accessor
-    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+    services.AddHttpContextAccessor();
+    //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+    //
+
+
 
     // Domain Services
     services.AddTransient<IUserClaimService, UserClaimService>();
@@ -56,7 +63,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
         });
 
     // MVC Controllers
-    services.AddControllers();
+    services.AddControllers().AddFluentValidation();
 
     // Swagger
     services.AddSwaggerGen(c =>
@@ -89,6 +96,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
 void ConfigureApp(WebApplication app)
 {
+    app.UseExceptionMiddleware();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

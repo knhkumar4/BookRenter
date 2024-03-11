@@ -25,7 +25,14 @@ namespace BookRenter.Controllers
             try
             {
                 var result = await _checkoutService.CheckoutBooksAsync();
-                return Ok(new ApiResponse<string>(true, "Checkout successful.", result));
+                if (result.Success)
+                {
+                    return Ok(new ApiResponse<string>(true, result.Message));
+                }
+                else
+                {
+                    return BadRequest(new ApiResponse<string>(false, result.Message));
+                }
             }
             catch (Exception ex)
             {
@@ -33,5 +40,6 @@ namespace BookRenter.Controllers
                 return StatusCode(500, new ApiResponse<string>(false, "An error occurred while processing the checkout."));
             }
         }
+
     }
 }

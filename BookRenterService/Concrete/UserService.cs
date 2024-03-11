@@ -22,11 +22,8 @@ namespace BookRenter.Services
             string passwordHash = HashPassword(userRequest.Password);
 
             // Create the user
-            var user = new User
-            {
-                Username = userRequest.Username,
-                PasswordHash = passwordHash                
-            };
+            User user = userRequest;
+            user.PasswordHash = passwordHash;           
 
             // Add the user to the database
             await _unitOfWork.UserRepository.CreateUserAsync(user);

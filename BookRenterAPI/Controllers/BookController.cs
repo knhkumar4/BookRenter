@@ -1,5 +1,7 @@
 ﻿using BookRenter.Models.Responses;
+using BookRenter.Services;
 using BookRenter.Services.Interfaces;
+using BookRenterService.FluentValidator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +9,7 @@ namespace BookRenter.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
@@ -60,6 +62,13 @@ namespace BookRenter.Controllers
         [ProducesResponseType(201, Type = typeof(BookResponse))]
         public async Task<ActionResult<BookResponse>> AddBook(BookRequest bookRequest)
         {
+            // Validate the request
+            var validationResult = await new BookRequestValidator().ValidateAsync(bookRequest);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.First().ErrorMessage);
+            }
+
             var addedBookResponse = await _bookService.AddBookAsync(bookRequest);
             return CreatedAtAction(nameof(GetBookById), new { id = addedBookResponse.BookId }, addedBookResponse);
         }
@@ -79,6 +88,13 @@ namespace BookRenter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult<BookResponse>> UpdateBook(int id, BookRequest bookRequest)
         {
+            // Validate the request
+            var validationResult = await new BookRequestValidator().ValidateAsync(bookRequest);
+            if (!validationResult.IsValid)
+            {
+                return BadRequest(validationResult.Errors.First().ErrorMessage);
+            }
+
             try
             {
                 // Check if the provided book ID matches the ID in the request body
@@ -99,5 +115,6 @@ namespace BookRenter.Controllers
                 return StatusCode(500, "An error occurred while updating the book.");
             }
         }
+
     }
 }

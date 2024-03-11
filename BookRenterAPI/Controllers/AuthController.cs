@@ -37,7 +37,7 @@ namespace BookRenter.Controllers
                     return Unauthorized("Invalid username or password.");
                 }
 
-                var token = GenerateJwtToken(user.Username);
+                var token = GenerateJwtToken(user.Username, user.Role);
                 return Ok(new { Token = token });
             }
             catch (Exception ex)
@@ -46,7 +46,7 @@ namespace BookRenter.Controllers
             }
         }
 
-        private string GenerateJwtToken(string username)
+        private string GenerateJwtToken(string username, string role)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_configuration["JwtSettings:Secret"]);
@@ -55,7 +55,8 @@ namespace BookRenter.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username),
+                    new Claim(ClaimTypes.Role, role) // Add role claim
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
