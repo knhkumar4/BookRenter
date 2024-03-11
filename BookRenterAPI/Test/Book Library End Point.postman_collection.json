@@ -1,0 +1,502 @@
+{
+	"info": {
+		"_postman_id": "b39c247f-d235-4808-8cce-ac607e3dfc00",
+		"name": "Book Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24393525",
+		"_collection_link": "https://lunar-escape-792811.postman.co/workspace/Team-Workspace~582b0c94-9fc9-44ab-8417-e8f154be18d2/collection/24393525-b39c247f-d235-4808-8cce-ac607e3dfc00?action=share&source=collection_link&creator=24393525"
+	},
+	"item": [
+		{
+			"name": "Token",
+			"item": [
+				{
+					"name": "Get Token Admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"admin\",\r\n  \"password\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/Auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Token User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"user\",\r\n  \"password\": \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/Auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"Auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Get All Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7146/api/book",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7146/api/book/20",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"book",
+								"20"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Book",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \"bookId\": 6,\r\n        \"title\": \"The Catcher in the Rye\",\r\n        \"author\": \"J.D. Salinger\",\r\n        \"description\": \"A classic novel about teenage angst and rebellion.\",\r\n        \"genre\": \"Fiction\",\r\n        \"price\": 12.99,\r\n        \"rentPrice\": null\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/book/6",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"book",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"title\": \"Five Point Someone\",\r\n    \"author\": \"Chetan Bhagat\",\r\n    \"description\": \"A story about three IIT students struggling with their grades and relationships.\",\r\n    \"genre\": \"Fiction\",\r\n    \"price\": 8.99,\r\n    \"rentPrice\": 2.00\r\n   \r\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/books",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"books"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Search Book",
+			"item": [
+				{
+					"name": "Search  Book By Author Or Title",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7146/api/SearchBook?searchTerm=Scott",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"SearchBook"
+							],
+							"query": [
+								{
+									"key": "searchTerm",
+									"value": "Scott"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Inventory",
+			"item": [
+				{
+					"name": "Get All Inventory",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Inventory",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invetory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"bookId\": 13,\r\n  \"quantity\": 15",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Inventory",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Inventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Inventory By BookId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Inventory/13",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Inventory",
+								"13"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Add to Cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n        \"bookId\": 1  \r\n }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Cart",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All from Cart",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Cart",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete from Cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Cart/15",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Cart",
+								"15"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CheckOut",
+			"item": [
+				{
+					"name": "checkout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/api/Checkout",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"api",
+								"Checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "HealthCheck",
+			"item": [
+				{
+					"name": "Health Checkup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"user\",\r\n  \"password\": \"user\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7146/health",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7146",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6ImFkbWluIiwicm9sZSI6IkFkbWluIiwibmJmIjoxNzEwMTk0NjQwLCJleHAiOjE3MTAxOTgyNDAsImlhdCI6MTcxMDE5NDY0MH0.7nN8-pvQwxc9hHYx2LLqLY1BbgP3_wObVDDXkxjgMpk",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
