@@ -9,7 +9,14 @@ namespace BookRenterService.FluentValidator
     {
         public AddToCartRequestValidator()
         {
-            RuleFor(x => x.BookId).GreaterThan(0).WithMessage("BookId must be greater than 0.");
+            RuleFor(x => x.BookId)
+             .NotEmpty().WithMessage("BookId is required.")
+             .Must(BeAnInteger).WithMessage("BookId must be a valid integer.")
+             .GreaterThan(0).WithMessage("BookId must be greater than 0.");
+        }
+        private bool BeAnInteger(int bookId)
+        {
+            return true;
         }
     }
 

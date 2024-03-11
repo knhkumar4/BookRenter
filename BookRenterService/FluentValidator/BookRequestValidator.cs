@@ -24,13 +24,23 @@ namespace BookRenterService.FluentValidator
 
             RuleFor(x => x.Price)
                 .NotEmpty().WithMessage("Price is required.")
+                .Must(BeADecimal).WithMessage("Price must be a valid integer.")
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
 
             RuleFor(x => x.RentPrice)
                  .NotEmpty().WithMessage("RentPrice is required.")
+                 .Must(BeANullableDecimal).WithMessage("Price must be a valid integer.")
                 .GreaterThan(0).When(x => x.RentPrice != null).WithMessage("Rent price must be greater than 0.");
 
            
+        }
+        private bool BeADecimal(double price)
+        {
+            return true;
+        }
+        private bool BeANullableDecimal(double? price)
+        {
+            return true;
         }
     }
 
