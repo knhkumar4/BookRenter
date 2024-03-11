@@ -36,8 +36,12 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
     services.AddHttpContextAccessor();
     //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-    //
-
+    //Healthcheck  
+    services.AddHealthChecks()
+      .AddSqlServer(connectionString: configuration["ConnectionStrings:BookRenterDatabase"],
+                    name: "SQL Server",
+                    failureStatus: Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus.Unhealthy,
+                    tags: new string[] { "db", "sql", "sqlserver" });
 
 
     // Domain Services
@@ -96,7 +100,16 @@ void ConfigureServices(IServiceCollection services, IConfiguration configuration
 
 void ConfigureApp(WebApplication app)
 {
+    app.UseRouting(); 
+
+    app.UseEndpoints(endpoints =>
+    {
+        // Map health check endpoint
+        endpoints.MapHealthChecks("/health");
+    });
+
     app.UseExceptionMiddleware();
+
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();

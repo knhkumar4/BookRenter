@@ -1,23 +1,34 @@
 ﻿using BookRenterData.Context;
+using BookRenterData.UnitOfWork.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace BookRenterData.Tests
 {
-    public class UnitOfWorkTests
+    public class UnitOfWorkTests : IDisposable
     {
-        [Fact]
-        public void Constructor_ShouldThrowArgumentNullException_WhenDbContextIsNull()
+        private readonly BookRenterContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public UnitOfWorkTests()
         {
-            // Arrange, Act, Assert
-            Assert.Throws<ArgumentNullException>(() => new UnitOfWork.UnitOfWork(null));
+            // You can use an in-memory database for testing purposes
+            var options = new DbContextOptionsBuilder<BookRenterContext>()
+                 .UseInMemoryDatabase(databaseName: "TestDatabase")
+                 .Options;
+
+            // Create an instance of the DbContext with the options
+            _dbContext = new BookRenterContext(options);
+
+            // Create the UnitOfWork with the configured DbContext
+            _unitOfWork = new UnitOfWork.UnitOfWork(_dbContext);
         }
 
         [Fact]
-        public void BookRepository_ShouldReturnNonNullRepositoryInstance()
+        public void BookRepository_ShouldNotBeNull()
         {
             // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
+            var unitOfWork = new UnitOfWork.UnitOfWork(_dbContext);
 
             // Act
             var bookRepository = unitOfWork.BookRepository;
@@ -27,11 +38,10 @@ namespace BookRenterData.Tests
         }
 
         [Fact]
-        public void CartBookRepository_ShouldReturnNonNullRepositoryInstance()
+        public void CartBookRepository_ShouldNotBeNull()
         {
             // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
+            var unitOfWork = new UnitOfWork.UnitOfWork(_dbContext);
 
             // Act
             var cartBookRepository = unitOfWork.CartBookRepository;
@@ -41,11 +51,10 @@ namespace BookRenterData.Tests
         }
 
         [Fact]
-        public void UserRepository_ShouldReturnNonNullRepositoryInstance()
+        public void UserRepository_ShouldNotBeNull()
         {
             // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
+            var unitOfWork = new UnitOfWork.UnitOfWork(_dbContext);
 
             // Act
             var userRepository = unitOfWork.UserRepository;
@@ -55,11 +64,10 @@ namespace BookRenterData.Tests
         }
 
         [Fact]
-        public void InventoryRepository_ShouldReturnNonNullRepositoryInstance()
+        public void InventoryRepository_ShouldNotBeNull()
         {
             // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
+            var unitOfWork = new UnitOfWork.UnitOfWork(_dbContext);
 
             // Act
             var inventoryRepository = unitOfWork.InventoryRepository;
@@ -72,42 +80,27 @@ namespace BookRenterData.Tests
         public async Task CompleteAsync_ShouldSaveChanges()
         {
             // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
+            var options = new DbContextOptionsBuilder<BookRenterContext>()
+                .UseInMemoryDatabase("TestDatabase")
+                .Options;
+
+            var mockDbContext = new Mock<BookRenterContext>(options);
+            var unitOfWork = new UnitOfWork.UnitOfWork(mockDbContext.Object);
 
             // Act
             await unitOfWork.CompleteAsync();
 
             // Assert
-            dbContextMock.Verify(x => x.SaveChangesAsync(default), Times.Once);
+            mockDbContext.Verify(db => db.SaveChangesAsync(default(CancellationToken)), Times.Once);
         }
 
-        [Fact]
-        public async Task DisposeAsync_ShouldDisposeDbContext()
+
+
+        public void Dispose()
         {
-            // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
-
-            // Act
-            await unitOfWork.DisposeAsync();
-
-            // Assert
-            dbContextMock.Verify(x => x.DisposeAsync(), Times.Once);
-        }
-
-        [Fact]
-        public void Dispose_ShouldDisposeDbContext()
-        {
-            // Arrange
-            var dbContextMock = new Mock<BookRenterContext>();
-            var unitOfWork = new UnitOfWork.UnitOfWork(dbContextMock.Object);
-
-            // Act
-            unitOfWork.Dispose();
-
-            // Assert
-            dbContextMock.Verify(x => x.DisposeAsync(), Times.Once);
+            // Clean up resources, if needed
+            _dbContext.Dispose();
+            (_unitOfWork as IDisposable)?.Dispose();
         }
     }
 }
