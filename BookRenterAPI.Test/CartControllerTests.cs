@@ -49,7 +49,7 @@ namespace BookRenterAPI.Test
         public async Task AddToCart_ValidRequest_Returns201Created()
         {
             // Arrange
-            _cartServiceMock.Setup(x => x.AddBookToCartAsync(It.IsAny<int>())).ReturnsAsync(true);
+            _cartServiceMock.Setup(x => x.AddBookToCartAsync(It.IsAny<int>())).ReturnsAsync((true, "Book added to cart successfully."));
 
             var addToCartRequest = new AddToCartRequest { BookId = 1 };
 
@@ -66,7 +66,7 @@ namespace BookRenterAPI.Test
         public async Task AddToCart_BookAlreadyInCart_Returns400BadRequest()
         {
             // Arrange
-            _cartServiceMock.Setup(x => x.AddBookToCartAsync(It.IsAny<int>())).ReturnsAsync(false);
+            _cartServiceMock.Setup(x => x.AddBookToCartAsync(It.IsAny<int>())).ReturnsAsync((false, "The book is already in the cart."));
 
             var addToCartRequest = new AddToCartRequest { BookId = 1 };
 

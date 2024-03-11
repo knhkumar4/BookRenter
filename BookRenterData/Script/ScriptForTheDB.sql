@@ -102,6 +102,7 @@ CREATE TABLE [dbo].[Inventories](
 	[InventoryId] [int] IDENTITY(1,1) NOT NULL,
 	[BookId] [int] NOT NULL,
 	[Quantity] [int] NOT NULL,
+	[RowVersion] ROWVERSION,
 	[CreatedDate] [datetime] NOT NULL,
 PRIMARY KEY CLUSTERED 
 (

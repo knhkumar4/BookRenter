@@ -15,6 +15,8 @@ namespace BookRenterData.Entities
 
         [Required]
         public DateTime CreatedDate { get; set; }
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
 
         // Navigation property
         public virtual Book Book { get; set; }

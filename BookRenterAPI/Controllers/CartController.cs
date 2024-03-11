@@ -39,29 +39,18 @@ namespace BookRenter.Controllers
                 return BadRequest(new ApiResponse<string>(false, validationResult.Errors.First().ErrorMessage));
             }
 
-            try
-            {
-                var isSuccess = await _cartService.AddBookToCartAsync(request.BookId);
+            var (success, message) = await _cartService.AddBookToCartAsync(request.BookId);
 
-                if (isSuccess)
-                {
-                    return Created(string.Empty, new ApiResponse<string>(true, "Book added to cart successfully."));
-                }
-                else
-                {
-                    return BadRequest(new ApiResponse<string>(false, "The book is already in the cart."));
-                }
-            }
-            catch (InvalidOperationException ex)
+            if (success)
             {
-                return BadRequest(new ApiResponse<string>(false, ex.Message));
+                return Created(string.Empty, new ApiResponse<string>(true, message));
             }
-            catch (Exception ex)
+            else
             {
-                // Log the exception
-                return StatusCode(500, new ApiResponse<string>(false, "An error occurred while processing the request."));
+                return BadRequest(new ApiResponse<string>(false, message));
             }
         }
+
 
         [HttpDelete("{bookId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

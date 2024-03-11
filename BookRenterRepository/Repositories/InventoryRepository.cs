@@ -34,7 +34,16 @@ namespace JC.Samples.AsyncRepository.Repository
 
         public async Task<Inventory> GetInventoryByBookIdAsync(int bookId)
         {
-            return await _dbContext.Inventories.FirstOrDefaultAsync(i => i.BookId == bookId);
+            try
+            {
+                return await _dbContext.Inventories.FirstOrDefaultAsync(i => i.BookId == bookId);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
         }
 
 

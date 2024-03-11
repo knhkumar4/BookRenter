@@ -3,6 +3,10 @@ using BookRenterData.Entities;
 using BookRenterData.UnitOfWork.Interfaces;
 using BookRenterService.Interfaces;
 using Moq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Xunit;
 
 namespace BookRenterDataServices.Test
 {
@@ -30,23 +34,20 @@ namespace BookRenterDataServices.Test
 
             var existingCartItem = (CartBook)null;
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
-                          .ReturnsAsync(existingCartItem);
+                           .ReturnsAsync(existingCartItem);
 
             var cartItemCount = 3; // Set a value less than the limit for successful addition
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetCartItemCountAsync(user.UserId))
-                          .ReturnsAsync(cartItemCount);
+                           .ReturnsAsync(cartItemCount);
 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.AddAsync(It.IsAny<CartBook>()))
-                          .ReturnsAsync(new CartBook()); // Adjust as needed
-
-            //_mockUnitOfWork.Setup(x => x.CompleteAsync())
-            //              .ReturnsAsync(1); // Adjust as needed
+                           .ReturnsAsync(new CartBook()); // Adjust as needed
 
             // Act
-            var result = await _cartService.AddBookToCartAsync(bookIdToAdd);
+            var (success, _) = await _cartService.AddBookToCartAsync(bookIdToAdd);
 
             // Assert
-            Assert.True(result);
+            Assert.True(success);
             _mockUnitOfWork.Verify(x => x.CartBookRepository.AddAsync(It.IsAny<CartBook>()), Times.Once);
             _mockUnitOfWork.Verify(x => x.CompleteAsync(), Times.Once);
         }
@@ -62,19 +63,19 @@ namespace BookRenterDataServices.Test
 
             var existingCartItem = new CartBook(); // Simulate that the book is already in the cart
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
-                          .ReturnsAsync(existingCartItem);
+                           .ReturnsAsync(existingCartItem);
 
             // Act
-            var result = await _cartService.AddBookToCartAsync(bookIdToAdd);
+            var (success, _) = await _cartService.AddBookToCartAsync(bookIdToAdd);
 
             // Assert
-            Assert.False(result);
+            Assert.False(success);
             _mockUnitOfWork.Verify(x => x.CartBookRepository.AddAsync(It.IsAny<CartBook>()), Times.Never);
             _mockUnitOfWork.Verify(x => x.CompleteAsync(), Times.Never);
         }
 
         [Fact]
-        public async Task AddBookToCartAsync_CartFull_ThrowsException()
+        public async Task AddBookToCartAsync_CartFull_Failure()
         {
             // Arrange
             var user = new User { UserId = 1 }; // Adjust user details as needed
@@ -84,15 +85,17 @@ namespace BookRenterDataServices.Test
 
             var existingCartItem = (CartBook)null;
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
-                          .ReturnsAsync(existingCartItem);
+                           .ReturnsAsync(existingCartItem);
 
             var cartItemCount = 5; // Set a value greater than or equal to the limit for cart full scenario
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetCartItemCountAsync(user.UserId))
-                          .ReturnsAsync(cartItemCount);
+                           .ReturnsAsync(cartItemCount);
 
-            // Act & Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await _cartService.AddBookToCartAsync(bookIdToAdd));
+            // Act
+            var (success, _) = await _cartService.AddBookToCartAsync(bookIdToAdd);
 
+            // Assert
+            Assert.False(success);
             _mockUnitOfWork.Verify(x => x.CartBookRepository.AddAsync(It.IsAny<CartBook>()), Times.Never);
             _mockUnitOfWork.Verify(x => x.CompleteAsync(), Times.Never);
         }
@@ -108,21 +111,19 @@ namespace BookRenterDataServices.Test
 
             var cartItemToRemove = new CartBook(); // Simulate that the book is in the cart
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToRemove, user.UserId))
-                          .ReturnsAsync(cartItemToRemove);
+                           .ReturnsAsync(cartItemToRemove);
 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.DeleteAsync(It.IsAny<CartBook>()))
-                          .Returns(Task.CompletedTask);
+                           .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _cartService.RemoveBookFromCartAsync(bookIdToRemove);
+            var success = await _cartService.RemoveBookFromCartAsync(bookIdToRemove);
 
             // Assert
-            Assert.True(result);
+            Assert.True(success);
             _mockUnitOfWork.Verify(x => x.CartBookRepository.DeleteAsync(It.IsAny<CartBook>()), Times.Once);
             _mockUnitOfWork.Verify(x => x.CompleteAsync(), Times.Once);
         }
-
-        // ... (other test methods remain the same)
 
         [Fact]
         public async Task GetAllCartItemsAsync_ReturnsCartBookResponses()
@@ -137,7 +138,7 @@ namespace BookRenterDataServices.Test
                 new CartBook { Book = new Book { BookId = 2, Title = "Book2" }, Quantity = 1 }
             };
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByUserIdAsync(user.UserId))
-                          .ReturnsAsync(cartBooks);
+                           .ReturnsAsync(cartBooks);
 
             // Act
             var result = await _cartService.GetAllCartItemsAsync();

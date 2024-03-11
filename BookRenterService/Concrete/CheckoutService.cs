@@ -26,6 +26,12 @@ namespace BookRenter.Services
             var user = await _userClaimService.GetUserFromClaimAsync();
             var cartBooks = await _unitOfWork.CartBookRepository.GetCartBooksByUserIdAsync(user.UserId);
 
+            // Check if there are no books in the cart
+            if (cartBooks == null || cartBooks.Count() == 0)
+            {
+                return new CheckoutResponse { Success = false, Message = "No books found in the cart." };
+            }
+
             // Check if all books in cart are available in inventory
             foreach (var cartBook in cartBooks)
             {

@@ -24,18 +24,10 @@ namespace BookRenterData.Context
                 .WithOne(i => i.Book)
                 .HasForeignKey<Inventory>(i => i.BookId);
 
-            //// Configure the primary key for Inventory to be the same as BookId
-            //modelBuilder.Entity<Inventory>()
-            //    .HasKey(i => i.BookId);
-
-            //// Configure many-to-many relationship between Book and User (via CartBook)
-            //modelBuilder.Entity<CartBook>()
-            //    .HasKey(cb => new { cb.UserId, cb.BookId });
-
-            //modelBuilder.Entity<CartBook>()
-            //    .HasOne(cb => cb.User)
-            //    .WithMany(u => u.CartBooks)
-            //    .HasForeignKey(cb => cb.UserId);
+            // Configure concurrency token for Inventory entity
+            modelBuilder.Entity<Inventory>()
+                .Property(i => i.RowVersion)
+                .IsConcurrencyToken();
 
 
         }
