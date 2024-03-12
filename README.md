@@ -1,9 +1,38 @@
-
-
-
 -----
 # Project Overview
 The BookRenter application is under development, aiming to provide a platform for renting books. As a developer, my role involves developing RESTful APIs for specific functionalities.
+
+**Project Architecture Overview:**
+
+In the ongoing process of refactoring the codebase, the project architecture is being reorganized to adhere to common application development patterns. The primary patterns being implemented are the Repository Pattern and the Service Layer Pattern. The current structure of the application layers is as follows:
+
+1. **Controllers:**
+   1. The Controllers layer serves as the entry point for handling user requests and contains application logic.
+   1. Responsibilities include accepting user input data, validating input, and passing data to the corresponding service layer.
+1. **Services:**
+   1. Act as the bridge between Controllers and Repositories, orchestrating data validation, business logic, and data persistence operations.
+   1. Fluent API Validation Integration: Services now leverage Fluent API Validation for comprehensive data validation and business rule enforcement. This integration allows for more readable, maintainable, and chainable validation logic that is executed before any business logic or database interactions.
+1. **Unit of Work:**
+   1. The Unit of Work component serves as a cohesive unit comprising repositories, facilitating transactions and ensuring data consistency.
+   1. Responsibilities include managing the lifecycle of repository instances and coordinating multiple repository operations within a single transaction context.
+1. **Repositories:**
+   1. The Repositories layer is responsible for interacting with database models and executing database operations.
+   1. Each repository is associated with a specific database table, encapsulating data access logic and providing methods for CRUD (Create, Read, Update, Delete) operations.
+1. **Models:**
+   1. The Models layer consists of Laravel model files representing database tables and defining relationships between entities.
+   1. Each model represents a distinct database table and encapsulates data access and manipulation methods.
+
+![](Aspose.Words.1f6faf84-62e5-4b82-8390-534174f333a6.001.png)
+
+**Observations and Granularity:**
+
+Upon reviewing the architecture, the granularity of the layers is currently aligned in a 1:1 relationship as follows:
+
+- Each database table corresponds to a single model, reflecting the entity structure within the database.
+- Each model is associated with a dedicated repository, encapsulating data access logic specific to that entity.
+- Every repository is linked to a Unit of Work, ensuring transactional integrity and coordination among related repository operations.
+- Each Unit of Work corresponds to a service, orchestrating business logic operations and interacting with repositories.
+- Finally, each service is associated with a controller, establishing a direct mapping between service methods and controller actions.
 
 **Endpoint Details**
 
@@ -41,12 +70,14 @@ Additionally, thorough testing coverage has been ensured by implementing unit te
 - Default logging by dotnet
 - Swagger OpenAPI
 - Health Checks
+- Fluent Api
+- XUnit
 -----
 **Features**
 
 - Clean Code Architecture
 - RESTful Design
-- Entity Framework Core - Code First
+- Entity Framework Core - db First
 - Repository Pattern - Generic
 - Unit of Work
 - Identity with JWT Authentication
@@ -68,9 +99,7 @@ Additionally, thorough testing coverage has been ensured by implementing unit te
 -----
 # To set up and run the BookRenter project, follow these steps:
 1. **Clone the Project:**
-   1. Clone the BookRenter project repository from GitHub to your local machine.
-      Clone the BookRenter project repository from the GitHub to your local machine.
-      url: <https://github.com/knhkumar4/BookRenter/tree/master>
+   1. Clone the BookRenter project repository from the GitHub to your local machine.
       You can find the project on GitHub at the following URL: [BookRenter GitHub Repository](https://github.com/knhkumar4/BookRenter/tree/master).  
 
 1. **Open the Project:**
@@ -86,10 +115,10 @@ Additionally, thorough testing coverage has been ensured by implementing unit te
 1. **Execute the SQL Script:**
    1. Open your preferred SQL Server management tool (e.g., SQL Server Management Studio).
    1. Copy the entire SQL script provided for database setup.
-      ![](Aspose.Words.d6e9561d-c358-44b8-ac68-7655b234e1de.001.png)
+      ![](Aspose.Words.1f6faf84-62e5-4b82-8390-534174f333a6.002.png)
    1. Execute the script in the management tool to create the database schema, populate it with initial data, and establish foreign key constraints.
    1. Ensure that the script runs successfully without any errors.
-   1. ` `The entire database setup script, including table creation, initial data insertion, and foreign key constraints, is **executed without adding Entity Framework migration due to the complexity involved in seeding the data.So that I would be easy for you to run the project.**
+   1. ` `I set up the entire database by running a script that creates tables, inserts initial data, and establishes foreign key constraints. I chose not to use Entity Framework migration for this because the process of seeding the data is quite complex. This setup simplifies running the project for you.**.**
 1. **Run the Project:**
    1. Build the solution in your IDE to ensure all dependencies are resolved.
    1. Start the BookRenter application by running the project from your IDE.
@@ -97,27 +126,23 @@ Additionally, thorough testing coverage has been ensured by implementing unit te
 1. **Test Endpoints with Postman:**
    1. Import the provided Postman request JSON file into your Postman application.
 
-      ![](Aspose.Words.d6e9561d-c358-44b8-ac68-7655b234e1de.002.png)
+      ![](Aspose.Words.1f6faf84-62e5-4b82-8390-534174f333a6.003.png)
 
    1. Use the imported requests to test various endpoints of the BookRenter application.
    1. Verify that the endpoints function correctly and return expected responses.
 
-I've set up two types of users: admins and regular users. Admins have full access to everything in the app, while regular users can only do certain things, like searching for books, managing their cart, and checking out. 
+In the application, there are two types of user accounts: admin and regular user. Admin users have full access to all features and functionalities within the app. On the other hand, regular users have limited capabilities, allowing them to search for books, manage their cart, and proceed with checkout.
 
+For testing or demonstration, use the following credentials:
 
-{  "username": "admin",
-
-`  `"password": "test"}
-
-{  "username": "user",
-
-`  `"password": "user"}
+- Administrator Access: Username: admin Password: test
+- Regular User Access: Username: user Password: user
 
 
 
 By following these steps, you'll successfully set up and run the BookRenter project, execute the database script, and configure the connection string for database access. Additionally, you'll be able to test the endpoints using the provided Postman requests.
-![](Aspose.Words.d6e9561d-c358-44b8-ac68-7655b234e1de.003.png)
+![](Aspose.Words.1f6faf84-62e5-4b82-8390-534174f333a6.004.png)
 
-![](Aspose.Words.d6e9561d-c358-44b8-ac68-7655b234e1de.004.png)
+![](Aspose.Words.1f6faf84-62e5-4b82-8390-534174f333a6.005.png)
 
 

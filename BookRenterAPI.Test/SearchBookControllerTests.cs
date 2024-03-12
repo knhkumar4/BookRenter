@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BookRenter.Controllers;
-using BookRenter.Models.Responses;
+﻿using BookRenter.Controllers;
 using BookRenter.Services.Interfaces;
 using BookRenterService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 
 namespace BookRenterAPI.Test
 {

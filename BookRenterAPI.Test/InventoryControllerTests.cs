@@ -1,75 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BookRenter.Controllers;
-using BookRenter.Models.Responses;
-using BookRenter.Services.Interfaces;
+﻿using BookRenter.Controllers;
 using BookRenter.Services.Models;
 using BookRenterService.Interfaces;
 using BookRenterService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
 
 namespace BookRenterAPI.Test
 {
     public class InventoryControllerTests
     {
         private readonly Mock<IInventoryService> _inventoryServiceMock;
-        private readonly InventoryController _inventoryController;
+        private readonly InventoryController _controller;
 
         public InventoryControllerTests()
         {
             _inventoryServiceMock = new Mock<IInventoryService>();
-            _inventoryController = new InventoryController(_inventoryServiceMock.Object);
+            _controller = new InventoryController(_inventoryServiceMock.Object);
         }
 
         [Fact]
-        public async Task GetInventoryByBookId_ExistingBook_ReturnsOk()
+        public async Task GetInventoryByBookId_ExistingBookId_ReturnsOk()
         {
             // Arrange
             var bookId = 1;
-            var expectedInventory = new InventoryResponse
-            {
-                InventoryId = 1,
-                BookId = bookId,
-                Quantity = 5,
-                BookTitle = "Sample Book"
-            };
+            var expectedInventory = new InventoryResponse { InventoryId = 1, BookId = 1, Quantity = 10, BookTitle = "Sample Book" };
 
             _inventoryServiceMock.Setup(x => x.GetInventoryByBookIdAsync(bookId))
-                               .ReturnsAsync(expectedInventory);
+                                 .ReturnsAsync(expectedInventory);
 
             // Act
-            var result = await _inventoryController.GetInventoryByBookId(bookId);
+            var result = await _controller.GetInventoryByBookId(bookId);
 
             // Assert
             var actionResult = Assert.IsType<ActionResult<InventoryResponse>>(result);
             var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
-            var inventoryResponse = Assert.IsType<InventoryResponse>(okResult.Value);
+            var inventory = Assert.IsType<InventoryResponse>(okResult.Value);
 
-            Assert.Equal(expectedInventory.InventoryId, inventoryResponse.InventoryId);
-            Assert.Equal(expectedInventory.BookId, inventoryResponse.BookId);
-            Assert.Equal(expectedInventory.Quantity, inventoryResponse.Quantity);
-            Assert.Equal(expectedInventory.BookTitle, inventoryResponse.BookTitle);
+            Assert.Equal(expectedInventory.InventoryId, inventory.InventoryId);
+            Assert.Equal(expectedInventory.BookId, inventory.BookId);
+            Assert.Equal(expectedInventory.Quantity, inventory.Quantity);
+            Assert.Equal(expectedInventory.BookTitle, inventory.BookTitle);
         }
 
         [Fact]
-        public async Task GetInventoryByBookId_NonExistingBook_ReturnsNotFound()
+        public async Task GetInventoryByBookId_NonExistingBookId_ReturnsNotFound()
         {
             // Arrange
             var bookId = 2;
 
             _inventoryServiceMock.Setup(x => x.GetInventoryByBookIdAsync(bookId))
-                               .ReturnsAsync((InventoryResponse)null);
+                                 .ReturnsAsync((InventoryResponse)null);
 
             // Act
-            var result = await _inventoryController.GetInventoryByBookId(bookId);
+            var result = await _controller.GetInventoryByBookId(bookId);
 
             // Assert
-            var actionResult = Assert.IsType<ActionResult<InventoryResponse>>(result);
-            Assert.IsType<NotFoundResult>(actionResult.Result);
+            Assert.IsType<ActionResult<InventoryResponse>>(result);
+            Assert.IsType<NotFoundResult>(result.Result);
         }
 
         [Fact]
@@ -78,15 +65,15 @@ namespace BookRenterAPI.Test
             // Arrange
             var expectedInventories = new List<InventoryResponse>
             {
-                new InventoryResponse { InventoryId = 1, BookId = 101, Quantity = 3, BookTitle = "Book A" },
-                new InventoryResponse { InventoryId = 2, BookId = 102, Quantity = 5, BookTitle = "Book B" }
+                new InventoryResponse { InventoryId = 1, BookId = 1, Quantity = 10, BookTitle = "Sample Book 1" },
+                new InventoryResponse { InventoryId = 2, BookId = 2, Quantity = 5, BookTitle = "Sample Book 2" }
             };
 
             _inventoryServiceMock.Setup(x => x.GetAllInventoriesAsync())
-                               .ReturnsAsync(expectedInventories);
+                                 .ReturnsAsync(expectedInventories);
 
             // Act
-            var result = await _inventoryController.GetAllInventories();
+            var result = await _controller.GetAllInventories();
 
             // Assert
             var actionResult = Assert.IsType<ActionResult<IEnumerable<InventoryResponse>>>(result);
@@ -104,55 +91,61 @@ namespace BookRenterAPI.Test
         }
 
         [Fact]
-        public async Task AddInventory_ValidRequest_ReturnsCreatedAtAction()
+        public async Task AddInventory_ValidInventoryRequest_ReturnsCreatedAtAction()
         {
             // Arrange
-            _inventoryServiceMock.Setup(x => x.AddInventoryAsync(It.IsAny<InventoryRequest>()))
-                               .ReturnsAsync(new InventoryResponse { InventoryId = 1, BookId = 123, Quantity = 5, BookTitle = "Sample Book" });
+            var inventoryRequest = new InventoryRequest { BookId = 1, Quantity = 10 };
+            var expectedInventoryResponse = new InventoryResponse { InventoryId = 1, BookId = 1, Quantity = 10, BookTitle = "Sample Book" };
+
+            _inventoryServiceMock.Setup(x => x.AddInventoryAsync(inventoryRequest))
+                                 .ReturnsAsync(expectedInventoryResponse);
 
             // Act
-            var result = await _inventoryController.AddInventory(new InventoryRequest());
-
-            // Assert
-            Assert.IsType<ActionResult<InventoryResponse>>(result);
-            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-
-            Assert.Equal(201, createdAtActionResult.StatusCode);
-
-            var inventoryResponse = Assert.IsType<InventoryResponse>(createdAtActionResult.Value);
-            Assert.Equal(1, inventoryResponse.InventoryId);
-            Assert.Equal(123, inventoryResponse.BookId);
-            Assert.Equal(5, inventoryResponse.Quantity);
-            Assert.Equal("Sample Book", inventoryResponse.BookTitle);
-        }
-
-        [Fact]
-        public async Task AddInventory_NullRequest_ReturnsBadRequest()
-        {
-            // Act
-            var result = await _inventoryController.AddInventory(null);
-
-            // Assert
-            Assert.IsType<ActionResult<InventoryResponse>>(result);
-            Assert.IsType<BadRequestResult>(result.Result);
-        }
-
-        [Fact]
-        public async Task AddInventory_ServiceError_ReturnsInternalServerError()
-        {
-            // Arrange
-            _inventoryServiceMock.Setup(x => x.AddInventoryAsync(It.IsAny<InventoryRequest>()))
-                               .ThrowsAsync(new Exception("Simulated exception"));
-
-            // Act
-            var result = await _inventoryController.AddInventory(new InventoryRequest());
+            var result = await _controller.AddInventory(inventoryRequest);
 
             // Assert
             var actionResult = Assert.IsType<ActionResult<InventoryResponse>>(result);
-            var objectResult = Assert.IsType<ObjectResult>(actionResult.Result);
+            var createdAtActionResult = Assert.IsType<CreatedAtActionResult>(actionResult.Result);
+            var inventory = Assert.IsType<InventoryResponse>(createdAtActionResult.Value);
 
-            Assert.Equal(500, objectResult.StatusCode);
-            Assert.Equal("An error occurred while adding the inventory.", objectResult.Value);
+            Assert.Equal(expectedInventoryResponse.InventoryId, inventory.InventoryId);
+            Assert.Equal(expectedInventoryResponse.BookId, inventory.BookId);
+            Assert.Equal(expectedInventoryResponse.Quantity, inventory.Quantity);
+            Assert.Equal(expectedInventoryResponse.BookTitle, inventory.BookTitle);
+        }
+
+        [Fact]
+        public async Task AddInventory_InvalidInventoryRequest_ReturnsBadRequest()
+        {
+            // Arrange
+            var inventoryRequest = new InventoryRequest(); // Invalid request
+
+            // Act
+            var result = await _controller.AddInventory(inventoryRequest);
+
+            // Assert
+            Assert.IsType<ActionResult<InventoryResponse>>(result);
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+        }
+
+        [Fact]
+        public async Task AddInventory_ErrorInService_ReturnsInternalServerError()
+        {
+            // Arrange
+            var inventoryRequest = new InventoryRequest { BookId = 1, Quantity = 10 };
+
+            _inventoryServiceMock.Setup(x => x.AddInventoryAsync(inventoryRequest))
+                                 .ThrowsAsync(new Exception("Simulated exception"));
+
+            // Act
+            var result = await _controller.AddInventory(inventoryRequest);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<InventoryResponse>>(result);
+            var statusCodeResult = Assert.IsType<ObjectResult>(actionResult.Result);
+
+            Assert.Equal(500, statusCodeResult.StatusCode);
+            Assert.Equal("An error occurred while adding the inventory.", statusCodeResult.Value);
         }
     }
 }

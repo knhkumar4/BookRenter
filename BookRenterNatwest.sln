@@ -13,11 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterService", "BookRe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{55AFB1DE-EB66-444A-B12E-C3675550EFA5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterRepositoryTest", "BookRenterRepositoryTest\BookRenterRepositoryTest.csproj", "{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterRepository.Test", "BookRenterRepositoryTest\BookRenterRepository.Test.csproj", "{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterDataServices.Test", "BookRenterDataServices.Test\BookRenterDataServices.Test.csproj", "{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookRenterAPI.Test", "BookRenterAPI.Test\BookRenterAPI.Test.csproj", "{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookRenterServiceIntregation.Test", "BookRenterServiceIntregation.Test\BookRenterServiceIntregation.Test.csproj", "{72FEED44-873E-4F8B-8E8C-C38A54EAE743}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72FEED44-873E-4F8B-8E8C-C38A54EAE743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72FEED44-873E-4F8B-8E8C-C38A54EAE743}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72FEED44-873E-4F8B-8E8C-C38A54EAE743}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72FEED44-873E-4F8B-8E8C-C38A54EAE743}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +67,7 @@ Global
 		{335E5BC1-1678-4B15-AE4E-8B43CE32C0E7} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
 		{C095C9FA-FB3A-45D1-8047-D13AA1E8CF71} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
 		{EA6288F2-23F8-48DB-B415-BBBA33CD4DA4} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
+		{72FEED44-873E-4F8B-8E8C-C38A54EAE743} = {55AFB1DE-EB66-444A-B12E-C3675550EFA5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CECD5ABD-178B-442A-8CDD-6B5DC7150D5F}

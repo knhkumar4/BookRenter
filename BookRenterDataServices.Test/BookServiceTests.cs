@@ -120,27 +120,7 @@ namespace BookRenterDataServices.Test
             await Assert.ThrowsAsync<ArgumentException>(() => _bookService.DeleteBookResponseAsync(bookId));
         }
 
-        //[Fact]
-        //public async Task SearchBooksAsync_ReturnsFilteredBooks()
-        //{
-        //    // Arrange
-        //    var searchTerm = "Test";
-        //    var books = new List<Book>
-        //    {
-        //        new Book { BookId = 1, Title = "Test Book 1", Author = "Author" },
-        //        new Book { BookId = 2, Title = "Another Test Book", Author = "Test Author" }
-        //    };
-
-        //    _mockUnitOfWork.Setup(uow => uow.BookRepository.GetManyAsync(It.IsAny<Func<Book, bool>>()))
-        //        .ReturnsAsync(books);
-
-        //    // Act
-        //    var results = await _bookService.SearchBooksAsync(searchTerm);
-
-        //    // Assert
-        //    Assert.NotNull(results);
-        //    Assert.Equal(books.Count, results.Count());
-        //}
+        
 
     }
 }

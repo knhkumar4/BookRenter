@@ -1,13 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using BookRenter.Controllers;
+﻿using BookRenter.Controllers;
 using BookRenter.Models.Requests;
 using BookRenterService.Interfaces;
 using BookRenterService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Xunit;
+using System.Net;
 
 namespace BookRenterAPI.Test
 {
@@ -109,7 +106,5 @@ namespace BookRenterAPI.Test
             Assert.Equal((int)HttpStatusCode.NotFound, result.StatusCode);
             Assert.False((bool)((ApiResponse<string>)result.Value).Success);
         }
-
-        // Add more test methods for different scenarios with RemoveBookFromCartAsync method
     }
 }

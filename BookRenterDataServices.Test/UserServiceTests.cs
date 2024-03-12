@@ -21,7 +21,7 @@ namespace BookRenterDataServices.Test
             {
                 Username = "testuser",
                 Password = "testpassword"
-                // Add other properties as needed
+               
             };
 
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(userRequest.Password, BCrypt.Net.BCrypt.GenerateSalt());
@@ -35,9 +35,9 @@ namespace BookRenterDataServices.Test
             userRepositoryMock.Setup(repo => repo.CreateUserAsync(It.IsAny<User>()))
                 .Callback<User>(user =>
                 {
-                    user.UserId = 1; // Simulate setting the user ID during creation
+                    user.UserId = 1; 
                 })
-                .ReturnsAsync((User)null); // Change the return value to match the correct signature
+                .ReturnsAsync((User)null); 
 
             var userService = new UserService(unitOfWorkMock.Object);
 
@@ -48,13 +48,13 @@ namespace BookRenterDataServices.Test
             Assert.NotNull(createdUser);
             Assert.Equal(userRequest.Username, createdUser.Username);
 
-            // Verify that CreateUserAsync is called with the expected user
+           
             userRepositoryMock.Verify(repo => repo.CreateUserAsync(It.IsAny<User>()), Times.Once);
 
-            // Verify that CompleteAsync is called on the UnitOfWork
+           
             unitOfWorkMock.Verify(uow => uow.CompleteAsync(), Times.Once);
 
-            // Verify password using BCrypt.Net.BCrypt.Verify
+           
             Assert.True(BCrypt.Net.BCrypt.Verify(userRequest.Password, createdUser.PasswordHash));
 
         }
@@ -80,7 +80,7 @@ namespace BookRenterDataServices.Test
 
             unitOfWorkMock.SetupGet(uow => uow.UserRepository).Returns(userRepositoryMock.Object);
 
-            // Mock the GetUserByUsernameAsync method to simulate retrieving a user by username
+          
             userRepositoryMock.Setup(repo => repo.GetUserByUsernameAsync(username))
                 .ReturnsAsync(user);
 
@@ -108,7 +108,7 @@ namespace BookRenterDataServices.Test
 
             unitOfWorkMock.SetupGet(uow => uow.UserRepository).Returns(userRepositoryMock.Object);
 
-            // Mock the GetUserByUsernameAsync method to simulate not finding a user by username
+          
             userRepositoryMock.Setup(repo => repo.GetUserByUsernameAsync(username))
                 .ReturnsAsync((User)null);
 
@@ -141,7 +141,7 @@ namespace BookRenterDataServices.Test
 
             unitOfWorkMock.SetupGet(uow => uow.UserRepository).Returns(userRepositoryMock.Object);
 
-            // Mock the GetUserByUsernameAsync method to simulate retrieving a user by username
+           
             userRepositoryMock.Setup(repo => repo.GetUserByUsernameAsync(username))
                 .ReturnsAsync(user);
 

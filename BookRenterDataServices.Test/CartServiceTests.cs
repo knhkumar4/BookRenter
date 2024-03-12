@@ -27,21 +27,21 @@ namespace BookRenterDataServices.Test
         public async Task AddBookToCartAsync_BookNotInCart_Success()
         {
             // Arrange
-            var user = new User { UserId = 1 }; // Adjust user details as needed
+            var user = new User { UserId = 1 }; 
             _mockUserClaimService.Setup(x => x.GetUserFromClaimAsync()).ReturnsAsync(user);
 
-            var bookIdToAdd = 123; // Replace with a valid book ID
+            var bookIdToAdd = 123; 
 
             var existingCartItem = (CartBook)null;
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
                            .ReturnsAsync(existingCartItem);
 
-            var cartItemCount = 3; // Set a value less than the limit for successful addition
+            var cartItemCount = 3; 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetCartItemCountAsync(user.UserId))
                            .ReturnsAsync(cartItemCount);
 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.AddAsync(It.IsAny<CartBook>()))
-                           .ReturnsAsync(new CartBook()); // Adjust as needed
+                           .ReturnsAsync(new CartBook()); 
 
             // Act
             var (success, _) = await _cartService.AddBookToCartAsync(bookIdToAdd);
@@ -56,12 +56,12 @@ namespace BookRenterDataServices.Test
         public async Task AddBookToCartAsync_BookAlreadyInCart_Failure()
         {
             // Arrange
-            var user = new User { UserId = 1 }; // Adjust user details as needed
+            var user = new User { UserId = 1 }; 
             _mockUserClaimService.Setup(x => x.GetUserFromClaimAsync()).ReturnsAsync(user);
 
-            var bookIdToAdd = 123; // Replace with a valid book ID
+            var bookIdToAdd = 123; 
 
-            var existingCartItem = new CartBook(); // Simulate that the book is already in the cart
+            var existingCartItem = new CartBook(); 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
                            .ReturnsAsync(existingCartItem);
 
@@ -78,16 +78,16 @@ namespace BookRenterDataServices.Test
         public async Task AddBookToCartAsync_CartFull_Failure()
         {
             // Arrange
-            var user = new User { UserId = 1 }; // Adjust user details as needed
+            var user = new User { UserId = 1 }; 
             _mockUserClaimService.Setup(x => x.GetUserFromClaimAsync()).ReturnsAsync(user);
 
-            var bookIdToAdd = 123; // Replace with a valid book ID
+            var bookIdToAdd = 123; 
 
             var existingCartItem = (CartBook)null;
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToAdd, user.UserId))
                            .ReturnsAsync(existingCartItem);
 
-            var cartItemCount = 5; // Set a value greater than or equal to the limit for cart full scenario
+            var cartItemCount = 5; 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetCartItemCountAsync(user.UserId))
                            .ReturnsAsync(cartItemCount);
 
@@ -104,12 +104,12 @@ namespace BookRenterDataServices.Test
         public async Task RemoveBookFromCartAsync_BookInCart_Success()
         {
             // Arrange
-            var user = new User { UserId = 1 }; // Adjust user details as needed
+            var user = new User { UserId = 1 }; 
             _mockUserClaimService.Setup(x => x.GetUserFromClaimAsync()).ReturnsAsync(user);
 
-            var bookIdToRemove = 123; // Replace with a valid book ID
+            var bookIdToRemove = 123; 
 
-            var cartItemToRemove = new CartBook(); // Simulate that the book is in the cart
+            var cartItemToRemove = new CartBook(); 
             _mockUnitOfWork.Setup(x => x.CartBookRepository.GetByBookIdAndUserIdAsync(bookIdToRemove, user.UserId))
                            .ReturnsAsync(cartItemToRemove);
 
@@ -129,10 +129,10 @@ namespace BookRenterDataServices.Test
         public async Task GetAllCartItemsAsync_ReturnsCartBookResponses()
         {
             // Arrange
-            var user = new User { UserId = 1 }; // Adjust user details as needed
+            var user = new User { UserId = 1 }; 
             _mockUserClaimService.Setup(x => x.GetUserFromClaimAsync()).ReturnsAsync(user);
 
-            var cartBooks = new List<CartBook> // Adjust as needed
+            var cartBooks = new List<CartBook> 
             {
                 new CartBook { Book = new Book { BookId = 1, Title = "Book1" }, Quantity = 2 },
                 new CartBook { Book = new Book { BookId = 2, Title = "Book2" }, Quantity = 1 }
